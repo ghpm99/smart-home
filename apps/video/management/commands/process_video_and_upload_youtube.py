@@ -1,37 +1,34 @@
 import time
 from django.core.management.base import BaseCommand
-from moviepy.editor import VideoFileClip, TextClip, CompositeVideoClip
+from moviepy.editor import VideoFileClip, TextClip, CompositeVideoClip, VideoFileClip
 from video.models import Video
 from django.conf import settings
 
 
 class Command(BaseCommand):
     """
-        Create invoice
+        Process video and upload youtube
     """
 
     def run_command(self):
         print('Processando')
-        print(settings.BASE_DIR)
-        # Load myHolidays.mp4 and select the subclip 00:00:50 - 00:00:60
-        video = Video.objects.first()
-        clip = VideoFileClip(str(settings.BASE_DIR) + video.video.url)
+        videos = Video.objects.all(status=Video.S_PENDING)
 
-        # Reduce the audio volume (volume x 0.8)
-        # clip = clip.volumex(0.8)
+        for video in videos:
 
-        # Generate a text clip. You can customize the font, color, etc.
-        txt_clip = TextClip(
-            "Edited By kawori Using Python", fontsize=30, color='white')
+            video.status = Video.S_PROCESSING
+            video.save()
 
-        # Say that you want it to appear 10s at the center of the screen
-        txt_clip = txt_clip.set_pos('center').set_duration(10)
+            clip = VideoFileClip(str(settings.BASE_DIR) + video.video.url)
 
-        # Overlay the text clip on the first video clip
-        video = CompositeVideoClip([clip, txt_clip])
+            image = VideoFileClip('media/image/original.gif').set_start(0).set_position(('left', 'left'))
 
-        # Write the result to a file (many options available !)
-        video.write_videofile("output/teste.mp4")
+            video_composite = CompositeVideoClip([clip, image])
+            video_composite.write_videofile("output/{}.mp4".format(video.title), fps=60)
+
+            video.status = Video.S_UPLOADING
+            video.save()
+
 
     def handle(self, *args, **options):
         begin = time.time()
