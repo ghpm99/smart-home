@@ -21,11 +21,11 @@ class Command(BaseCommand):
 
             clip = VideoFileClip(str(settings.BASE_DIR) + video.video.url)
 
-            image = VideoFileClip('media/image/original.gif')
-            #image = image.set_position(12,1100)
+            image_gif = (VideoFileClip('media/image/original.gif')
+                            .set_duration(clip.duration)
+                            .set_position((12,1100)))
 
-
-            video_composite = CompositeVideoClip([clip, image])
+            video_composite = CompositeVideoClip([clip, image_gif])
             video_composite.write_videofile("output/{}.mp4".format(video.title), fps=60)
 
             video.status = Video.S_UPLOADING
