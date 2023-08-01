@@ -21,7 +21,9 @@ class Command(BaseCommand):
 
             clip = VideoFileClip(str(settings.BASE_DIR) + video.video.url)
 
-            image = VideoFileClip('media/image/original.gif').set_start(0).set_position(('left', 'left'))
+            image = VideoFileClip('media/image/original.gif')
+            image = image.set_position(12,1100)
+
 
             video_composite = CompositeVideoClip([clip, image])
             video_composite.write_videofile("output/{}.mp4".format(video.title), fps=60)
