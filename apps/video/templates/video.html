@@ -1,0 +1,14 @@
+{% load static %}
+<html>
+	<head>
+		<title>{{computer_name}}</title>
+		<link href="{% static 'css/home.css' %}" rel="stylesheet" />
+	</head>
+	<body>
+		<form action="/video/" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			{{ form }}
+			<input type="submit" value="Fazer upload" >
+		</form>
+	</body>
+</html>
