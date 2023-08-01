@@ -21,7 +21,7 @@ class Command(BaseCommand):
 
             clip = VideoFileClip(str(settings.BASE_DIR) + video.video.url)
 
-            image_gif = (VideoFileClip('media/image/original.gif')
+            image_gif = (VideoFileClip('media/image/original.gif', has_mask=True)
                             .loop()
                             .set_duration(clip.duration)
                             .resize(width=568, height=349)
