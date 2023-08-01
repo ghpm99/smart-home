@@ -12,7 +12,7 @@ class Command(BaseCommand):
 
     def run_command(self):
         print('Processando')
-        videos = Video.objects.all(status=Video.S_PENDING)
+        videos = Video.objects.filter(status=Video.S_PENDING).all()
 
         for video in videos:
 
