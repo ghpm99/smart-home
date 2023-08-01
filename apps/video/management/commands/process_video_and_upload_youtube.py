@@ -22,7 +22,7 @@ class Command(BaseCommand):
             clip = VideoFileClip(str(settings.BASE_DIR) + video.video.url)
 
             image = VideoFileClip('media/image/original.gif')
-            image = image.set_position(12,1100)
+            #image = image.set_position(12,1100)
 
 
             video_composite = CompositeVideoClip([clip, image])
