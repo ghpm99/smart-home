@@ -16,9 +16,11 @@ class Command(BaseCommand):
     def run_command(self):
         print('Processando')
         is_processing = Video.objects.filter(
-            status=Video.S_PROCESSING).exists()
+            status=Video.S_PROCESSING
+        ).exists()
 
         if is_processing:
+            print('Existe video sendo processado!')
             return
 
         videos = Video.objects.filter(
@@ -33,22 +35,25 @@ class Command(BaseCommand):
             video.save()
 
             try:
-
+                print('Buscando arquivo de video')
                 clip = VideoFileClip(str(settings.BASE_DIR) + video.video.url)
-
+                print('Buscando gif de overlay')
                 image_gif = (VideoFileClip('media/image/original.gif', has_mask=True)
                              .loop()
                              .set_duration(clip.duration)
                              .resize(width=568, height=349)
                              .set_position((12, 1100)))
-
+                print('Mesclando video e overlay')
                 video_composite = CompositeVideoClip([clip, image_gif])
+                print('Renderizando video')
                 video_composite.write_videofile(
                     "output/{}.mp4".format(video.file_name), fps=60)
-
+                print('Processo concluido')
                 video.status = Video.S_PROCESSING_SUCCESS
 
-            except Exception:
+            except Exception as e:
+                print('Processo falhou')
+                print(e)
                 video.status = Video.S_PROCESSING_FAIL
 
             video.save()
