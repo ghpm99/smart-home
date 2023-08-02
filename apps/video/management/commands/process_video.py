@@ -36,9 +36,11 @@ class Command(BaseCommand):
 
             try:
                 print('Buscando arquivo de video')
-                clip = VideoFileClip(str(settings.BASE_DIR) + video.video.url)
+                clip = VideoFileClip(
+                    f'{str(settings.BASE_DIR)}{video.video.url}'
+                )
                 print('Buscando gif de overlay')
-                image_gif = (VideoFileClip('media/image/original.gif', has_mask=True)
+                image_gif = (VideoFileClip(f'{str(settings.BASE_DIR)}/media/image/original.gif', has_mask=True)
                              .loop()
                              .set_duration(clip.duration)
                              .resize(width=568, height=349)
@@ -47,7 +49,7 @@ class Command(BaseCommand):
                 video_composite = CompositeVideoClip([clip, image_gif])
                 print('Renderizando video')
                 video_composite.write_videofile(
-                    "output/{}.mp4".format(video.file_name), fps=60)
+                    f"output/{video.file_name}.mp4", fps=60)
                 print('Processo concluido')
                 video.status = Video.S_PROCESSING_SUCCESS
 
