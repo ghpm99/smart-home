@@ -9,7 +9,8 @@ def video(request):
     if request.method == "POST":
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            video = Video(video=request.FILES["file"], title=request.POST.title)
+            video = Video(
+                video=request.FILES["file"], title=request.POST.title, description=request.POST.description)
             video.save()
             return HttpResponseRedirect("/video/")
     else:
