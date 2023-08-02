@@ -1,13 +1,14 @@
 
+import http.client
 import random
 import time
 
-import http.client
 import httplib2
-from googleapiclient.errors import HttpError
 from django.conf import settings
 from django.core.management.base import BaseCommand
+from django.db.models import Q
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
 from video.models import Video
 
@@ -34,6 +35,7 @@ class Command(BaseCommand):
         is_upload = Video.objects.filter(status=Video.S_UPLOADING).exists()
 
         if is_upload:
+            print('Já existe video sendo feito upload')
             return
 
         def resumable_upload(insert_request):
@@ -80,7 +82,9 @@ class Command(BaseCommand):
         privacy = 'private'
         tags = keywords.split(',')
 
-        videos = Video.objects.filter(status=Video.S_PROCESSING_SUCCESS).all()
+        videos = Video.objects.filter(
+            Q(status=Video.S_PROCESSING_SUCCESS) | Q(status=Video.S_FAIL)
+        ).all()
 
         for video in videos:
 
@@ -88,7 +92,7 @@ class Command(BaseCommand):
             video.save()
 
             try:
-
+                print('Gerando youtube build')
                 youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
                                 developerKey=settings.YOUTUBE_API_KEY)
 
@@ -103,19 +107,26 @@ class Command(BaseCommand):
                         privacyStatus=privacy
                     )
                 )
-
+                print('Criando request')
                 insert_request = youtube.videos().insert(
                     part=",".join(body.keys()),
                     body=body,
-                    media_body=MediaFileUpload("{}/output/{}.mp4".format(
-                        str(settings.BASE_DIR), video.file_name), chunksize=-1, resumable=True)
+                    media_body=MediaFileUpload(
+                        f"{str(settings.BASE_DIR)}/output/{video.file_name}.mp4",
+                        chunksize=-1,
+                        resumable=True
+                    )
                 )
-
+                print('Iniciando envio')
                 resumable_upload(insert_request)
+
+                print('Envio finalizado')
 
                 video.status = Video.S_SUCCESS
 
-            except Exception:
+            except Exception as e:
+                print('Falhou no envio')
+                print(e)
                 video.status = Video.S_FAIL
 
             video.save()
