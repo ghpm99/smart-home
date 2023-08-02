@@ -1,9 +1,11 @@
 import time
 import uuid
-from django.core.management.base import BaseCommand
-from moviepy.editor import VideoFileClip, CompositeVideoClip
-from video.models import Video
+
 from django.conf import settings
+from django.core.management.base import BaseCommand
+from django.db.models import Q
+from moviepy.editor import CompositeVideoClip, VideoFileClip
+from video.models import Video
 
 
 class Command(BaseCommand):
@@ -13,17 +15,21 @@ class Command(BaseCommand):
 
     def run_command(self):
         print('Processando')
-        is_processing = Video.objects.filter(status=Video.S_PROCESSING).exists()
+        is_processing = Video.objects.filter(
+            status=Video.S_PROCESSING).exists()
 
         if is_processing:
             return
 
-        videos = Video.objects.filter(status=Video.S_PENDING).all()
+        videos = Video.objects.filter(
+            Q(status=Video.S_PENDING) | Q(status=Video.S_PROCESSING_FAIL)
+        ).all()
 
         for video in videos:
 
             video.status = Video.S_PROCESSING
-            video.file_name = str(uuid.uuid4())[:32]
+            if video.file_name is None:
+                video.file_name = str(uuid.uuid4())[:32]
             video.save()
 
             try:
