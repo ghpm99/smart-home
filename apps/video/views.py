@@ -4,7 +4,6 @@ from .forms import UploadFileForm
 from .models import Video
 
 
-# Create your views here.
 def video(request):
     if request.method == "POST":
         form = UploadFileForm(request.POST, request.FILES)
@@ -17,4 +16,22 @@ def video(request):
     else:
         form = UploadFileForm()
 
-    return render(request, "video.html", {"form": form})
+    videos = Video.objects.all().order_by('-id')
+
+    status = dict(Video.STATUS)
+
+    videos_data = [{
+        'id': video.id,
+        'title': video.title,
+        'description': video.description,
+        'status': status.get(video.status),
+        'file_name': video.file_name,
+        'youtube_id': video.youtube_id,
+    } for video in videos]
+
+    ctx = {
+        "form": form,
+        "videos": videos_data,
+    }
+
+    return render(request, "video.html", ctx)
