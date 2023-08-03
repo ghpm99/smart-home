@@ -44,8 +44,8 @@ class Command(BaseCommand):
                 image_gif = (VideoFileClip(f'{str(settings.BASE_DIR)}/media/image/original.gif', has_mask=True)
                              .loop()
                              .set_duration(clip.duration)
-                             .resize(width=568, height=349)
-                             .set_position((12, 1100)))
+                             .resize(width=732, height=513)
+                             .set_position((12, 927)))
 
                 print('Mesclando video e overlay')
                 video_composite = CompositeVideoClip([clip, image_gif])
