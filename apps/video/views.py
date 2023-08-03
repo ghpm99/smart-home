@@ -25,8 +25,8 @@ def video(request):
         'title': video.title,
         'description': video.description,
         'status': status.get(video.status),
-        'file_name': video.file_name,
-        'youtube_id': video.youtube_id,
+        'file_name': video.file_name or '',
+        'youtube_id': video.youtube_id or '',
     } for video in videos]
 
     ctx = {
