@@ -54,10 +54,8 @@ class Command(BaseCommand):
 
             if credentials is None or credentials.invalid:
                 flags = argparse.Namespace(
-                    auth_host_name='localhost',
-                    auth_host_port=[8080, 8000],
                     logging_level='ERROR',
-                    noauth_local_webserver=False
+                    noauth_local_webserver=True
                 )
                 credentials = run_flow(flow, storage, flags)
 

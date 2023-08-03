@@ -2,3 +2,4 @@ Django==4.2.3
 Pillow==9.5.0
 moviepy==1.0.3
 google-api-python-client==2.95.0
+oauth2client==4.1.3
