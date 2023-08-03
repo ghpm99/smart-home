@@ -2,6 +2,7 @@
 import http.client
 import random
 import time
+import argparse
 
 import httplib2
 from django.conf import settings
@@ -10,6 +11,9 @@ from django.db.models import Q
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
+from oauth2client.tools import run_flow
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.file import Storage
 from video.models import Video
 
 httplib2.RETRIES = 1
@@ -38,7 +42,32 @@ class Command(BaseCommand):
             print('Já existe video sendo feito upload')
             return
 
-        def resumable_upload(insert_request):
+        def get_authenticated_service():
+            flow = flow_from_clientsecrets(
+                f"{str(settings.BASE_DIR)}{settings.CLIENT_SECRETS_FILE}",
+                scope=settings.YOUTUBE_UPLOAD_SCOPE,
+                message=settings.MISSING_CLIENT_SECRETS_MESSAGE
+            )
+
+            storage = Storage("youtube-oauth2.json")
+            credentials = storage.get()
+
+            if credentials is None or credentials.invalid:
+                flags = argparse.Namespace(
+                    auth_host_name='localhost',
+                    auth_host_port=[8080, 8000],
+                    logging_level='ERROR',
+                    noauth_local_webserver=False
+                )
+                credentials = run_flow(flow, storage, flags)
+
+            print('Build')
+            return build(
+                settings.YOUTUBE_API_SERVICE_NAME, settings.YOUTUBE_API_VERSION,
+                http=credentials.authorize(httplib2.Http())
+            )
+
+        def resumable_upload(insert_request, video: Video):
             response = None
             error = None
             retry = 0
@@ -48,9 +77,11 @@ class Command(BaseCommand):
                     status, response = insert_request.next_chunk()
                     if response is not None:
                         if 'id' in response:
+                            video.youtube_id = response['id']
                             print("Video id '%s' was successfully uploaded." %
                                   response['id'])
                         else:
+                            video.status = Video.S_FAIL
                             exit(
                                 "The upload failed with an unexpected response: %s" % response)
                 except HttpError as e:
@@ -74,9 +105,6 @@ class Command(BaseCommand):
                           sleep_seconds)
                     time.sleep(sleep_seconds)
 
-        YOUTUBE_API_SERVICE_NAME = "youtube"
-        YOUTUBE_API_VERSION = "v3"
-
         keywords = 'black desert,bdo,solare,witch awakening,witch,bruxa,black desert sa'
         category = '20'
         privacy = 'private'
@@ -86,6 +114,8 @@ class Command(BaseCommand):
             Q(status=Video.S_PROCESSING_SUCCESS) | Q(status=Video.S_FAIL)
         ).all()
 
+        youtube = get_authenticated_service()
+
         for video in videos:
 
             video.status = Video.S_UPLOADING
@@ -93,8 +123,6 @@ class Command(BaseCommand):
 
             try:
                 print('Gerando youtube build')
-                youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
-                                developerKey=settings.YOUTUBE_API_KEY)
 
                 body = dict(
                     snippet=dict(
@@ -118,7 +146,7 @@ class Command(BaseCommand):
                     )
                 )
                 print('Iniciando envio')
-                resumable_upload(insert_request)
+                resumable_upload(insert_request, video)
 
                 print('Envio finalizado')
 
