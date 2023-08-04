@@ -25,9 +25,6 @@ class Command(BaseCommand):
             if video.file_base is None:
                 video.file_base = video.video.name
 
-            video.video.delete()
-            video.save()
-
             try:
                 print('Buscando arquivo de video')
                 url_file_base = f'{str(settings.BASE_DIR)}{video.video.url}'
@@ -39,6 +36,9 @@ class Command(BaseCommand):
                 if os.path.isfile(url_file_proccessed):
                     size_removed += os.path.getsize(url_file_base)
                     os.remove(url_file_proccessed)
+
+                video.video.delete()
+                video.save()
 
             except Exception as e:
                 print(e)
