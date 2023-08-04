@@ -10,7 +10,7 @@ from video.models import Video
 
 class Command(BaseCommand):
     """
-        Process video and upload youtube
+        Process video
     """
 
     def run_command(self):

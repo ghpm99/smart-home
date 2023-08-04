@@ -27,3 +27,4 @@ class Video(models.Model):
     status = models.IntegerField(choices=STATUS, default=S_PENDING)
     file_name = models.CharField(max_length=32, null=True, blank=True)
     youtube_id = models.CharField(max_length=12, null=True, blank=True)
+    file_base = models.CharField(max_length=255, null=True, blank=True)

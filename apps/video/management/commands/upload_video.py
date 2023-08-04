@@ -30,7 +30,7 @@ RETRIABLE_EXCEPTIONS = (httplib2.HttpLib2Error, IOError, http.client.NotConnecte
 
 class Command(BaseCommand):
     """
-        Process video and upload youtube
+        upload video to youtube
     """
 
     def run_command(self):

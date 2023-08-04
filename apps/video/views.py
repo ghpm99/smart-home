@@ -9,8 +9,13 @@ def video(request):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             req = request.POST
+            file = request.FILES["file"]
             video = Video(
-                video=request.FILES["file"], title=req.get('title'), description=req.get('description'))
+                video=file,
+                title=req.get('title'),
+                description=req.get('description'),
+                file_base=file.name
+            )
             video.save()
             return HttpResponseRedirect("/video/")
     else:
@@ -27,6 +32,7 @@ def video(request):
         'status': status.get(video.status),
         'file_name': video.file_name or '',
         'youtube_id': video.youtube_id or '',
+        'file_base': video.file_base or '',
     } for video in videos]
 
     ctx = {

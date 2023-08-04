@@ -20,6 +20,7 @@
 						<th class="table-head-column">Status</th>
 						<th class="table-head-column">File Name</th>
 						<th class="table-head-column">Youtube Id</th>
+						<th class="table-head-column">Arquivo de base</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -39,6 +40,9 @@
 						</td>
 						<td class="column-container">
 							<div class="table-cell">{{ video.youtube_id }}</div>
+						</td>
+						<td class="column-container">
+							<div class="table-cell">{{ video.file_base }}</div>
 						</td>
 					</tr>
 					{% endfor %}
