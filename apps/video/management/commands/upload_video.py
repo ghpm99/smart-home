@@ -110,7 +110,7 @@ class Command(BaseCommand):
 
         videos = Video.objects.filter(
             Q(status=Video.S_PROCESSING_SUCCESS) | Q(status=Video.S_FAIL)
-        ).all()
+        )[:6]
 
         youtube = get_authenticated_service()
 
