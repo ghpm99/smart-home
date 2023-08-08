@@ -5,15 +5,21 @@ body {
 	background: linear-gradient(-120deg, #021b79, #0575e6, #205e9b);
 }
 
+.controllers{
+	width: 100%;
+	display: flex;
+	justify-content: space-evenly;
+}
+
 .form-container{
-    max-width: 500px;
-    background-color: #1c1a1f;
+	background-color: #222831;
     border-radius: 20px;
     padding: 16px;
     margin-bottom: 16px;
 }
 
 .form {
+	max-width: 500px;
 	display: flex;
     flex-direction: column;
     color: #fff;
@@ -38,7 +44,7 @@ label{
 }
 
 .table-container:hover::-webkit-scrollbar-thumb {
-    background-color: #1c1a1f;
+    background-color: #222831;
     border-radius: 20px;
 }
 
@@ -46,7 +52,7 @@ label{
     padding: 14px;
 	width: 100%;
 	border-radius: 20px;
-	background-color: #1c1a1f;
+	background-color: #222831;
 }
 
 .table-head {
@@ -57,7 +63,7 @@ label{
 		border-top-right-radius: 20px;
 	}
 
-	background-color: #2e2d33;
+	background-color: #222831;
 }
 
 .table-head-column {
@@ -78,14 +84,25 @@ label{
     border-bottom: none;
 }
 
-.column-container {
-
-}
-
 .table-cell {
-
 	font-weight: 400;
 	font-size: 14px;
 	line-height: 125%;
 	color: #ffffff;
+}
+
+.title{
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 125%;
+	color: #ffffff;
+}
+
+.team{
+	color: #ffffff;
+	margin-block: 16px;
+}
+
+.player{
+	display: flex;
 }
