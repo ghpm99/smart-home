@@ -1,6 +1,13 @@
 {% load static %}
-<html>
+<html lang="pt-BR" dir="ltr">
     <head>
+        <meta charset="utf-8">
+        <meta name="keywords" content="HTML, CSS, JavaScript"/>
+        <meta name="description" content="Video"/>
+        <meta name="referrer" content="origin-when-cross-origin">
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+        <meta name="robots" content="none">
         <title>{{ computer_name }}</title>
         <link href="{% static 'css/video.css' %}" rel="stylesheet" />
         <script src="https://code.jquery.com/jquery-3.7.0.min.js"
@@ -11,7 +18,7 @@
         <div class="controllers">
             <div class="form-container">
                 <form class="form"
-                      action="/video/"
+                      action="{% url 'video' %}"
                       method="post"
                       enctype="multipart/form-data">
                     {% csrf_token %}
@@ -37,110 +44,109 @@
                                 <select id="class1">
                                     {% for class_option in class_options %}
                                         <option {% if class_option.value == "Witch" %}selected{% endif %}
-                                                value="{{ class_option.value }}"
-                                                label="{{ class_option.label }}">
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="player">
-                                    <div>Personagem 2:</div>
-                                    <input id="player2" />
-                                    <div>Classe:</div>
-                                    <select id="class2">
-                                        {% for class_option in class_options %}
-                                            <option value="{{ class_option.value }}">{{ class_option.label }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="player">
-                                    <div>Personagem 3:</div>
-                                    <input id="player3" />
-                                    <div>Classe:</div>
-                                    <select id="class3">
-                                        {% for class_option in class_options %}
-                                            <option value="{{ class_option.value }}">{{ class_option.label }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
+                                                value="{{ class_option.value }}">{{ class_option.label }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
-                            <div class="team">
-                                <div>Time 2</div>
-                                <div class="player">
-                                    <div>Personagem 1:</div>
-                                    <input id="player4" />
-                                    <div>Classe:</div>
-                                    <select id="class4">
-                                        {% for class_option in class_options %}
-                                            <option value="{{ class_option.value }}">{{ class_option.label }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="player">
-                                    <div>Personagem 2:</div>
-                                    <input id="player5" />
-                                    <div>Classe:</div>
-                                    <select id="class5">
-                                        {% for class_option in class_options %}
-                                            <option value="{{ class_option.value }}">{{ class_option.label }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="player">
-                                    <div>Personagem 3:</div>
-                                    <input id="player6" />
-                                    <div>Classe:</div>
-                                    <select id="class6">
-                                        {% for class_option in class_options %}
-                                            <option value="{{ class_option.value }}">{{ class_option.label }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
+                            <div class="player">
+                                <div>Personagem 2:</div>
+                                <input id="player2" />
+                                <div>Classe:</div>
+                                <select id="class2">
+                                    {% for class_option in class_options %}
+                                        <option value="{{ class_option.value }}">{{ class_option.label }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
-                            <button onclick="applySolareTemplate()">Aplicar</button>
+                            <div class="player">
+                                <div>Personagem 3:</div>
+                                <input id="player3" />
+                                <div>Classe:</div>
+                                <select id="class3">
+                                    {% for class_option in class_options %}
+                                        <option value="{{ class_option.value }}">{{ class_option.label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
+                        <div class="team">
+                            <div>Time 2</div>
+                            <div class="player">
+                                <div>Personagem 1:</div>
+                                <input id="player4" />
+                                <div>Classe:</div>
+                                <select id="class4">
+                                    {% for class_option in class_options %}
+                                        <option value="{{ class_option.value }}">{{ class_option.label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="player">
+                                <div>Personagem 2:</div>
+                                <input id="player5" />
+                                <div>Classe:</div>
+                                <select id="class5">
+                                    {% for class_option in class_options %}
+                                        <option value="{{ class_option.value }}">{{ class_option.label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="player">
+                                <div>Personagem 3:</div>
+                                <input id="player6" />
+                                <div>Classe:</div>
+                                <select id="class6">
+                                    {% for class_option in class_options %}
+                                        <option value="{{ class_option.value }}">{{ class_option.label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <button onclick="applySolareTemplate()">Aplicar</button>
                     </div>
                 </div>
             </div>
-            <div class="table-container">
-                <table class="table">
-                    <thead class="table-head">
-                        <tr>
-                            <th class="table-head-column">ID</th>
-                            <th class="table-head-column">Titulo</th>
-                            <th class="table-head-column">Status</th>
-                            <th class="table-head-column">File Name</th>
-                            <th class="table-head-column">Youtube Id</th>
-                            <th class="table-head-column">Arquivo de base</th>
+        </div>
+        <div class="table-container">
+            <table class="table">
+                <thead class="table-head">
+                    <tr>
+                        <th class="table-head-column">ID</th>
+                        <th class="table-head-column">Titulo</th>
+                        <th class="table-head-column">Status</th>
+                        <th class="table-head-column">File Name</th>
+                        <th class="table-head-column">Youtube Id</th>
+                        <th class="table-head-column">Arquivo de base</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for video in videos %}
+                        <tr class="table-row">
+                            <td class="column-container">
+                                <div class="table-cell">{{ video.id }}</div>
+                            </td>
+                            <td class="column-container">
+                                <div class="table-cell">{{ video.title }}</div>
+                            </td>
+                            <td class="column-container">
+                                <div class="table-cell">{{ video.status }}</div>
+                            </td>
+                            <td class="column-container">
+                                <div class="table-cell">{{ video.file_name }}</div>
+                            </td>
+                            <td class="column-container">
+                                <div class="table-cell">{{ video.youtube_id }}</div>
+                            </td>
+                            <td class="column-container">
+                                <div class="table-cell">{{ video.file_base }}</div>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {% for video in videos %}
-                            <tr class="table-row">
-                                <td class="column-container">
-                                    <div class="table-cell">{{ video.id }}</div>
-                                </td>
-                                <td class="column-container">
-                                    <div class="table-cell">{{ video.title }}</div>
-                                </td>
-                                <td class="column-container">
-                                    <div class="table-cell">{{ video.status }}</div>
-                                </td>
-                                <td class="column-container">
-                                    <div class="table-cell">{{ video.file_name }}</div>
-                                </td>
-                                <td class="column-container">
-                                    <div class="table-cell">{{ video.youtube_id }}</div>
-                                </td>
-                                <td class="column-container">
-                                    <div class="table-cell">{{ video.file_base }}</div>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </body>
-        <script type="text/javascript">
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </body>
+    <script type="text/javascript">
         $('#template').change(function () {
             $('#' + this.value)
                 .show()
@@ -149,8 +155,8 @@
         })
 
         $('#template').change()
-        </script>
-        <script type="text/javascript">
+    </script>
+    <script type="text/javascript">
         function applySolareTemplate() {
             const player1 = $('#player1').val()
             const player2 = $('#player2').val()
@@ -177,10 +183,14 @@
             const class6PT = $('#class6 option:selected').text()
             const class6EUA = $('#class6 option:selected').val()
 
+            const description1 = 'Black Desert SA Solare Ranked'
+            const description2 = `${class1PT}, ${class2PT}, ${class3PT} Vs ${class4PT}, ${class5PT}, ${class6PT}`
+            const description3 = `${class1EUA}, ${class2EUA}, ${class3EUA} Vs ${class4EUA}, ${class5EUA}, ${class6EUA}`
+
             $('#id_title').val(`Black Desert Solare ${player1} ${player2} ${player3} Vs ${player4} ${player5} ${player6}`)
             $('#id_description').val(
-                `Black Desert SA Solare Ranked \n${class1PT}, ${class2PT}, ${class3PT} Vs ${class4PT}, ${class5PT}, ${class6PT}\n${class1EUA}, ${class2EUA}, ${class3EUA} Vs ${class4EUA}, ${class5EUA}, ${class6EUA}`
+                `${description1}\n${description2}\n${description3}`
             )
         }
-        </script>
-    </html>
+    </script>
+</html>
