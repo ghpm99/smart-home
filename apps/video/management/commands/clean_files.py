@@ -38,8 +38,8 @@ class Command(BaseCommand):
                     if os.path.isfile(url_file_base):
                         size_removed += os.path.getsize(url_file_base)
                         os.remove(url_file_base)
+                    video.video.delete()
 
-                video.video.delete()
                 video.save()
 
             except Exception as e:
