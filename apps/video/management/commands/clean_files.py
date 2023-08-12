@@ -26,7 +26,6 @@ class Command(BaseCommand):
                 video.file_base = video.video.name
 
             try:
-                print('Buscando arquivo de video')
 
                 url_file_proccessed = f'{str(settings.BASE_DIR)}/output/{video.file_name}.mp4'
                 if os.path.isfile(url_file_proccessed):
