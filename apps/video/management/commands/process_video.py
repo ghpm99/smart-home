@@ -91,10 +91,11 @@ class Command(BaseCommand):
 
         def get_authenticated_service():
 
-            storage = Storage("youtube-oauth2.json")
+            storage = Storage(f"{str(settings.BASE_DIR)}/youtube-oauth2.json")
             credentials = storage.get()
 
             if credentials is None or credentials.invalid:
+                print('credentials invalid!')
                 return None
 
             return build(
@@ -144,6 +145,7 @@ class Command(BaseCommand):
             if youtube is None:
                 video.status = Video.S_FAIL
                 video.save()
+                print('youtube is none')
                 return
 
             video.status = Video.S_UPLOADING
