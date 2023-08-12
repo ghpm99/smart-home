@@ -10,10 +10,12 @@ def video(request):
         if form.is_valid():
             req = request.POST
             file = request.FILES["file"]
+            print(set(req.get('keywords').split(',')))
             video = Video(
                 video=file,
                 title=req.get('title'),
                 description=req.get('description'),
+                keywords=req.get('keywords'),
                 file_base=file.name
             )
             video.save()
