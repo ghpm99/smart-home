@@ -103,10 +103,8 @@ class Command(BaseCommand):
                           sleep_seconds)
                     time.sleep(sleep_seconds)
 
-        keywords = 'black desert,bdo,solare,witch awakening,witch,bruxa,black desert sa'
         category = '20'
         privacy = 'private'
-        tags = keywords.split(',')
 
         videos = Video.objects.filter(
             Q(status=Video.S_PROCESSING_SUCCESS) | Q(status=Video.S_FAIL)
@@ -115,16 +113,22 @@ class Command(BaseCommand):
         youtube = get_authenticated_service()
 
         for video in videos:
-
             video.status = Video.S_UPLOADING
             video.save()
 
+            if video.keywords:
+                tags = list(set(video.keywords.split(',')))
+            else:
+                tags = ['Black Desert Online', 'Arena Solare', 'Luta Competitiva', 'Batalha Épica', 'PvP', 'Estratégia',
+                        'Combate', 'MMO', 'Jogo Online', 'Ação', 'Emoção', 'Awakening', 'Witch', 'Bruxa', 'SA']
+
             try:
                 print('Gerando youtube build')
+                video_title = f"{video.title} #{video.id}"
 
                 body = dict(
                     snippet=dict(
-                        title=video.title,
+                        title=video_title,
                         description=video.description,
                         tags=tags,
                         categoryId=category

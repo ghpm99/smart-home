@@ -150,7 +150,7 @@ class Command(BaseCommand):
             video.save()
 
             if video.keywords:
-                tags = set(video.keywords.split(','))
+                tags = list(set(video.keywords.split(',')))
             else:
                 tags = ['Black Desert Online', 'Arena Solare', 'Luta Competitiva', 'Batalha Épica', 'PvP', 'Estratégia',
                         'Combate', 'MMO', 'Jogo Online', 'Ação', 'Emoção', 'Awakening', 'Witch', 'Bruxa', 'SA']
