@@ -2,7 +2,6 @@
 import http.client
 import random
 import time
-import argparse
 
 import httplib2
 from django.conf import settings
@@ -11,8 +10,6 @@ from django.db.models import Q
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
-from oauth2client.tools import run_flow
-from oauth2client.client import flow_from_clientsecrets
 from oauth2client.file import Storage
 from video.models import Video
 
@@ -43,23 +40,13 @@ class Command(BaseCommand):
             return
 
         def get_authenticated_service():
-            flow = flow_from_clientsecrets(
-                f"{str(settings.BASE_DIR)}{settings.CLIENT_SECRETS_FILE}",
-                scope=settings.YOUTUBE_UPLOAD_SCOPE,
-                message=settings.MISSING_CLIENT_SECRETS_MESSAGE
-            )
-
-            storage = Storage("youtube-oauth2.json")
+            storage = Storage(f"{str(settings.BASE_DIR)}/youtube-oauth2.json")
             credentials = storage.get()
 
             if credentials is None or credentials.invalid:
-                flags = argparse.Namespace(
-                    logging_level='ERROR',
-                    noauth_local_webserver=True
-                )
-                credentials = run_flow(flow, storage, flags)
+                print('credentials invalid!')
+                return None
 
-            print('Build')
             return build(
                 settings.YOUTUBE_API_SERVICE_NAME, settings.YOUTUBE_API_VERSION,
                 http=credentials.authorize(httplib2.Http())
@@ -106,60 +93,59 @@ class Command(BaseCommand):
         category = '20'
         privacy = 'private'
 
-        videos = Video.objects.filter(
+        video = Video.objects.filter(
             Q(status=Video.S_PROCESSING_SUCCESS) | Q(status=Video.S_FAIL)
-        )[:6]
+        ).first()
 
         youtube = get_authenticated_service()
 
-        for video in videos:
-            video.status = Video.S_UPLOADING
-            video.save()
+        video.status = Video.S_UPLOADING
+        video.save()
 
-            if video.keywords:
-                tags = list(set(video.keywords.split(',')))
-            else:
-                tags = ['Black Desert Online', 'Arena Solare', 'Luta Competitiva', 'Batalha Épica', 'PvP', 'Estratégia',
-                        'Combate', 'MMO', 'Jogo Online', 'Ação', 'Emoção', 'Awakening', 'Witch', 'Bruxa', 'SA']
+        if video.keywords:
+            tags = list(set(video.keywords.split(',')))
+        else:
+            tags = ['Black Desert Online', 'Arena Solare', 'Luta Competitiva', 'Batalha Épica', 'PvP', 'Estratégia',
+                    'Combate', 'MMO', 'Jogo Online', 'Ação', 'Emoção', 'Awakening', 'Witch', 'Bruxa', 'SA']
 
-            try:
-                print('Gerando youtube build')
-                video_title = f"{video.title} #{video.id}"
+        try:
+            print('Gerando youtube build')
+            video_title = f"{video.title} #{video.id}"
 
-                body = dict(
-                    snippet=dict(
-                        title=video_title,
-                        description=video.description,
-                        tags=tags,
-                        categoryId=category
-                    ),
-                    status=dict(
-                        privacyStatus=privacy
-                    )
+            body = dict(
+                snippet=dict(
+                    title=video_title,
+                    description=video.description,
+                    tags=tags,
+                    categoryId=category
+                ),
+                status=dict(
+                    privacyStatus=privacy
                 )
-                print('Criando request')
-                insert_request = youtube.videos().insert(
-                    part=",".join(body.keys()),
-                    body=body,
-                    media_body=MediaFileUpload(
-                        f"{str(settings.BASE_DIR)}/output/{video.file_name}.mp4",
-                        chunksize=-1,
-                        resumable=True
-                    )
+            )
+            print('Criando request')
+            insert_request = youtube.videos().insert(
+                part=",".join(body.keys()),
+                body=body,
+                media_body=MediaFileUpload(
+                    f"{str(settings.BASE_DIR)}/output/{video.file_name}.mp4",
+                    chunksize=-1,
+                    resumable=True
                 )
-                print('Iniciando envio')
-                resumable_upload(insert_request, video)
+            )
+            print('Iniciando envio')
+            resumable_upload(insert_request, video)
 
-                print('Envio finalizado')
+            print('Envio finalizado')
 
-                video.status = Video.S_SUCCESS
+            video.status = Video.S_SUCCESS
 
-            except Exception as e:
-                print('Falhou no envio')
-                print(e)
-                video.status = Video.S_FAIL
+        except Exception as e:
+            print('Falhou no envio')
+            print(e)
+            video.status = Video.S_FAIL
 
-            video.save()
+        video.save()
 
     def handle(self, *args, **options):
         begin = time.time()
