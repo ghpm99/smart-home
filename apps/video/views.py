@@ -10,9 +10,9 @@ def video(request):
         if form.is_valid():
             req = request.POST
             file = request.FILES["file"]
-            print(set(req.get('keywords').split(',')))
             video = Video(
                 video=file,
+                name=req.get('name'),
                 title=req.get('title'),
                 description=req.get('description'),
                 keywords=req.get('keywords'),
@@ -29,7 +29,7 @@ def video(request):
 
     videos_data = [{
         'id': video.id,
-        'title': video.title,
+        'name': video.name or video.title,
         'description': video.description,
         'status': status.get(video.status),
         'file_name': video.file_name or '',

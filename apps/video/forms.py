@@ -2,6 +2,7 @@ from django import forms
 
 
 class UploadFileForm(forms.Form):
+    name = forms.CharField(max_length=100, label='Nome')
     title = forms.CharField(max_length=100, label='Titulo')
     description = forms.CharField(max_length=5000, widget=forms.Textarea, label='Descrição')
     keywords = forms.CharField(max_length=500, label='Tags Youtube')

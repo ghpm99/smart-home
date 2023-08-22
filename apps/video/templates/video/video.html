@@ -112,7 +112,7 @@
                 <thead class="table-head">
                     <tr>
                         <th class="table-head-column">ID</th>
-                        <th class="table-head-column">Titulo</th>
+                        <th class="table-head-column">Nome</th>
                         <th class="table-head-column">Status</th>
                         <th class="table-head-column">File Name</th>
                         <th class="table-head-column">Youtube Id</th>
@@ -126,7 +126,7 @@
                                 <div class="table-cell">{{ video.id }}</div>
                             </td>
                             <td class="column-container">
-                                <div class="table-cell">{{ video.title }}</div>
+                                <div class="table-cell">{{ video.name }}</div>
                             </td>
                             <td class="column-container">
                                 <div class="table-cell">{{ video.status }}</div>
@@ -195,6 +195,7 @@
             $('#id_keywords').val(
                 `Black Desert Online,Arena Solare,Luta Competitiva,Batalha Épica,${player1},${player2},${player3},${player4},${player5},${player6},PvP,Estratégia,Combate,MMO,Jogo Online,Ação,Emoção,${class1PT},${class1EUA},${class2PT},${class2EUA},${class3PT},${class3EUA},${class4PT},${class4EUA},${class5PT},${class5EUA},${class6PT},${class6EUA},`
             )
+            $('#id_name').val(`${player1} ${player2} ${player3} Vs ${player4} ${player5} ${player6}`)
         }
     </script>
 </html>

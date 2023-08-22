@@ -21,6 +21,7 @@ class Video(models.Model):
         (S_FAIL, "Falhou"),
     ]
 
+    name = models.CharField(max_length=100, null=True, blank=True)
     title = models.CharField(max_length=100, null=True, blank=True)
     description = models.TextField(max_length=5000, null=True, blank=True)
     keywords = models.TextField(max_length=500, null=True, blank=True)
