@@ -1,0 +1,54 @@
+
+import time
+
+import httplib2
+from django.conf import settings
+from django.core.management.base import BaseCommand
+from googleapiclient.discovery import build
+from oauth2client.file import Storage
+from video.models import Video
+
+
+class Command(BaseCommand):
+    """
+        update data video youtube
+    """
+
+    def run_command(self):
+
+        def get_authenticated_service():
+            storage = Storage(f"{str(settings.BASE_DIR)}/youtube-oauth2.json")
+            credentials = storage.get()
+
+            if credentials is None or credentials.invalid:
+                print('credentials invalid!')
+                return None
+
+            return build(
+                settings.YOUTUBE_API_SERVICE_NAME, settings.YOUTUBE_API_VERSION,
+                http=credentials.authorize(httplib2.Http())
+            )
+
+        video = Video.objects.filter(status=Video.S_SUCCESS).last()
+        print(video.youtube_id)
+
+        youtube = get_authenticated_service()
+
+        request = youtube.videos().list(
+            part="statistics,status",
+            id=video.youtube_id
+        )
+        response = request.execute()
+
+        print(response)
+
+    def handle(self, *args, **options):
+        begin = time.time()
+
+        self.stdout.write(self.style.SUCCESS('Running...'))
+
+        self.run_command()
+
+        self.stdout.write(self.style.SUCCESS('Success! :)'))
+        self.stdout.write(self.style.SUCCESS(
+            f'Done with {time.time() - begin}s'))
