@@ -34,6 +34,7 @@ def video(request):
         'status': status.get(video.status),
         'file_name': video.file_name or '',
         'youtube_id': video.youtube_id or '',
+        'privacy': video.privacy_status or '',
         'file_base': video.file_base or '',
     } for video in videos]
 

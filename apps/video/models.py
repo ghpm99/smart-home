@@ -30,13 +30,10 @@ class Video(models.Model):
     file_name = models.CharField(max_length=32, null=True, blank=True)
     youtube_id = models.CharField(max_length=12, null=True, blank=True)
     file_base = models.CharField(max_length=255, null=True, blank=True)
-
-
-class VideoYoutube(models.Model):
-    youtube_id = models.CharField(max_length=12, null=True, blank=True)
     upload_status = models.CharField(max_length=32, null=True, blank=True)
     privacy_status = models.CharField(max_length=32, null=True, blank=True)
     view_count = models.CharField(max_length=32, null=True, blank=True)
     like_count = models.CharField(max_length=32, null=True, blank=True)
     dislike_count = models.CharField(max_length=32, null=True, blank=True)
     comment_count = models.CharField(max_length=32, null=True, blank=True)
+

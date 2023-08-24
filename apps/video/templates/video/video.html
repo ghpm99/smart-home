@@ -10,9 +10,7 @@
         <meta name="robots" content="none">
         <title>{{ computer_name }}</title>
         <link href="{% static 'css/video.css' %}" rel="stylesheet" />
-        <script src="https://code.jquery.com/jquery-3.7.0.min.js"
-                integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
-                crossorigin="anonymous"></script>
+        <script src="{% static 'vendor/jquery.min.js' %}"></script>
     </head>
     <body>
         <div class="controllers">
@@ -116,6 +114,7 @@
                         <th class="table-head-column">Status</th>
                         <th class="table-head-column">File Name</th>
                         <th class="table-head-column">Youtube Id</th>
+                        <th class="table-head-column">Youtube Privacidade</th>
                         <th class="table-head-column">Arquivo de base</th>
                     </tr>
                 </thead>
@@ -136,6 +135,9 @@
                             </td>
                             <td class="column-container">
                                 <div class="table-cell">{{ video.youtube_id }}</div>
+                            </td>
+                            <td class="column-container">
+                                <div class="table-cell">{{ video.privacy }}</div>
                             </td>
                             <td class="column-container">
                                 <div class="table-cell">{{ video.file_base }}</div>
