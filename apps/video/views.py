@@ -1,5 +1,7 @@
+from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+
 from .forms import UploadFileForm
 from .models import Video
 
@@ -23,7 +25,15 @@ def video(request):
     else:
         form = UploadFileForm()
 
+    req = request.GET
+
     videos = Video.objects.all().order_by('-id')
+
+    paginator = Paginator(videos, req.get('per_page', 25))
+
+    page_number = request.GET.get('page', 1)
+
+    page_obj = paginator.get_page(page_number)
 
     status = dict(Video.STATUS)
 
@@ -36,7 +46,9 @@ def video(request):
         'youtube_id': video.youtube_id or '',
         'privacy': video.privacy_status or '',
         'file_base': video.file_base or '',
-    } for video in videos]
+    } for video in page_obj.object_list]
+
+    page_obj.object_list = videos_data
 
     class_options = [
         {'value': 'Archer', 'label': 'Arqueiro'},
@@ -69,7 +81,7 @@ def video(request):
 
     ctx = {
         "form": form,
-        "videos": videos_data,
+        "videos": page_obj,
         "class_options": class_options,
     }
 

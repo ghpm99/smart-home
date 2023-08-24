@@ -48,49 +48,6 @@ label{
     border-radius: 20px;
 }
 
-.table {
-    padding: 14px;
-	width: 100%;
-	border-radius: 20px;
-	background-color: #222831;
-}
-
-.table-head {
-	tr > th:first-child {
-		border-top-left-radius: 20px;
-	}
-	tr > th:last-child {
-		border-top-right-radius: 20px;
-	}
-
-	background-color: #222831;
-}
-
-.table-head-column {
-	padding: 16px;
-	font-weight: 400;
-	font-size: 16px;
-	line-height: 125%;
-	color: #bdc2c7;
-}
-
-.table-row {
-	text-align: center;
-	height: 50px;
-	border-bottom: 1px solid #f2f5f8;
-}
-
-.table-row:last-child {
-    border-bottom: none;
-}
-
-.table-cell {
-	font-weight: 400;
-	font-size: 14px;
-	line-height: 125%;
-	color: #ffffff;
-}
-
 .title{
 	font-weight: 400;
 	font-size: 14px;
