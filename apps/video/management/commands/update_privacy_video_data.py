@@ -1,6 +1,6 @@
 
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import httplib2
 from django.conf import settings
@@ -31,47 +31,25 @@ class Command(BaseCommand):
                 http=credentials.authorize(httplib2.Http())
             )
 
+        youtube = get_authenticated_service()
         videos = Video.objects.filter(status=Video.S_SUCCESS).exclude(privacy_status='public').order_by('id').all()
+        publish_at = datetime(2023, 8, 28, 00, 00, 00)
 
-        videos_paginator = Paginator(videos, 50)
-
-        separator = ','
-        current_page = 1
-
-        while current_page <= videos_paginator.num_pages:
-            videos_id = []
-
-            for video in videos_paginator.get_page(current_page):
-                videos_id.append(video.youtube_id)
-
-            youtube_id_separator = separator.join(videos_id)
-
-            youtube = get_authenticated_service()
-
-            request = youtube.videos().list(
-                part="statistics,status",
-                id=youtube_id_separator
+        for video in videos:
+            request = youtube.videos().update(
+                part="status",
+                body={
+                    "id": video.youtube_id,
+                    "status": {
+                        "privacyStatus": "private",
+                        "publishAt": publish_at.strftime('%Y-%m-%dT%H:%M:%SZ')
+                    }
+                }
             )
             response = request.execute()
 
-            for youtube_data in response.get('items'):
-                video_youtube = Video.objects.filter(youtube_id=youtube_data.get('id')).first()
-
-                video_status = youtube_data.get('status')
-                video_youtube.upload_status = video_status.get('uploadStatus')
-                video_youtube.privacy_status = video_status.get('privacyStatus')
-                publish_at = video_status.get('publishAt')
-                if publish_at is not None:
-                    publish_date = datetime.strptime(publish_at,'%Y-%m-%dT%H:%M:%SZ')
-                    print(publish_date)
-
-                video_statistics = youtube_data.get('statistics')
-                video_youtube.view_count = video_statistics.get('viewCount')
-                video_youtube.like_count = video_statistics.get('likeCount')
-                video_youtube.dislike_count = video_statistics.get('dislikeCount')
-                video_youtube.comment_count = video_statistics.get('commentCount')
-                video_youtube.save()
-            current_page += 1
+            print(response)
+            publish_at += timedelta(hours=6)
 
     def handle(self, *args, **options):
         begin = time.time()

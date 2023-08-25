@@ -126,7 +126,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CLIENT_SECRETS_FILE = "/client_secrets.json"
 YOUTUBE_UPLOAD_SCOPE = [
     "https://www.googleapis.com/auth/youtube.upload",
-    "https://www.googleapis.com/auth/youtube.readonly"
+    "https://www.googleapis.com/auth/youtube.readonly",
+    "https://www.googleapis.com/auth/youtube.force-ssl"
 ]
 MISSING_CLIENT_SECRETS_MESSAGE = "WARNING: Please configure OAuth 2.0"
 YOUTUBE_API_SERVICE_NAME = "youtube"

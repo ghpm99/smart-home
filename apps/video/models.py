@@ -36,4 +36,4 @@ class Video(models.Model):
     like_count = models.CharField(max_length=32, null=True, blank=True)
     dislike_count = models.CharField(max_length=32, null=True, blank=True)
     comment_count = models.CharField(max_length=32, null=True, blank=True)
-
+    publish_at = models.DateTimeField(null=True)

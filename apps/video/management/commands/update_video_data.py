@@ -1,5 +1,6 @@
 
 import time
+from datetime import datetime
 
 import httplib2
 from django.conf import settings
@@ -30,6 +31,7 @@ class Command(BaseCommand):
                 http=credentials.authorize(httplib2.Http())
             )
 
+        youtube = get_authenticated_service()
         videos = Video.objects.filter(status=Video.S_SUCCESS).order_by('id').all()
 
         videos_paginator = Paginator(videos, 50)
@@ -45,7 +47,6 @@ class Command(BaseCommand):
 
             youtube_id_separator = separator.join(videos_id)
 
-            youtube = get_authenticated_service()
 
             request = youtube.videos().list(
                 part="statistics,status",
@@ -59,6 +60,10 @@ class Command(BaseCommand):
                 video_status = youtube_data.get('status')
                 video_youtube.upload_status = video_status.get('uploadStatus')
                 video_youtube.privacy_status = video_status.get('privacyStatus')
+                publish_at = video_status.get('publishAt')
+                if publish_at is not None:
+                    publish_date = datetime.fromisoformat(publish_at.replace('Z', '+00:00'))
+                    video_youtube.publish_at = publish_date
 
                 video_statistics = youtube_data.get('statistics')
                 video_youtube.view_count = video_statistics.get('viewCount')
