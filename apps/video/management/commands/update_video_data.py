@@ -34,8 +34,6 @@ class Command(BaseCommand):
 
         videos_paginator = Paginator(videos, 50)
 
-        print(videos_paginator.num_pages)
-
         separator = ','
         current_page = 1
 

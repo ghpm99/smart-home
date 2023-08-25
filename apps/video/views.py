@@ -1,3 +1,4 @@
+import platform
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -7,23 +8,6 @@ from .models import Video
 
 
 def video(request):
-    if request.method == "POST":
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            req = request.POST
-            file = request.FILES["file"]
-            video = Video(
-                video=file,
-                name=req.get('name'),
-                title=req.get('title'),
-                description=req.get('description'),
-                keywords=req.get('keywords'),
-                file_base=file.name
-            )
-            video.save()
-            return HttpResponseRedirect("/video/")
-    else:
-        form = UploadFileForm()
 
     req = request.GET
 
@@ -49,6 +33,33 @@ def video(request):
     } for video in page_obj.object_list]
 
     page_obj.object_list = videos_data
+
+    ctx = {
+        'computer_name': platform.node(),
+        "videos": page_obj,
+    }
+
+    return render(request, "video/video.html", ctx)
+
+
+def new_video(request):
+    if request.method == "POST":
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            req = request.POST
+            file = request.FILES["file"]
+            video = Video(
+                video=file,
+                name=req.get('name'),
+                title=req.get('title'),
+                description=req.get('description'),
+                keywords=req.get('keywords'),
+                file_base=file.name
+            )
+            video.save()
+            return HttpResponseRedirect("/video/")
+    else:
+        form = UploadFileForm()
 
     class_options = [
         {'value': 'Archer', 'label': 'Arqueiro'},
@@ -80,9 +91,9 @@ def video(request):
     ]
 
     ctx = {
+        'computer_name': platform.node(),
         "form": form,
-        "videos": page_obj,
         "class_options": class_options,
     }
 
-    return render(request, "video/video.html", ctx)
+    return render(request, "video/new_video.html", ctx)
