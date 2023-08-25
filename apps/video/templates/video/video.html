@@ -1,8 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
-{% block head_bottom %}
-    <link href="{% static 'css/video.css' %}" rel="stylesheet">
-{% endblock head_bottom %}
+
 {% block content %}
     <div class="card my-4">
         <a href="{% url 'new_video' %}" role="button" class="btn btn-secondary">Novo</a>
