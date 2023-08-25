@@ -4,7 +4,7 @@ from video.models import Video
 
 # Register your models here.
 class VideoConfig(admin.ModelAdmin):
-    list_display = ['id', 'title', 'status', 'file_name', 'youtube_id', 'file_base']
+    list_display = ['id', 'title', 'status', 'file_name', 'youtube_id', 'privacy_status', 'view_count', 'file_base']
     pass
 
 
