@@ -1,44 +1,39 @@
 {% extends "base.html" %}
-
 {% block content %}
     <div class="card my-4">
         <a href="{% url 'new_video' %}" role="button" class="btn btn-secondary">Novo</a>
         <div class="card-body table-container my-2">
-            <table class="table">
-                <thead class="table-head">
+            <table class="table table-striped">
+                <thead>
                     <tr>
-                        <th class="table-head-column">ID</th>
-                        <th class="table-head-column">Nome</th>
-                        <th class="table-head-column">Status</th>
-                        <th class="table-head-column">File Name</th>
-                        <th class="table-head-column">Youtube Id</th>
-                        <th class="table-head-column">Youtube Privacidade</th>
-                        <th class="table-head-column">Arquivo de base</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Youtube Privacidade</th>
+                        <th scope="col">Visualizações</th>
+                        <th scope="col">Arquivo de base</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for video in videos %}
-                        <tr class="table-row">
-                            <td class="column-container">
-                                <div class="table-cell">{{ video.id }}</div>
+                        <tr>
+                            <th scope="row">
+                                <div>{{ video.id }}</div>
+                            </th >
+                            <td>
+                                <div>{{ video.name }}</div>
                             </td>
-                            <td class="column-container">
-                                <div class="table-cell">{{ video.name }}</div>
+                            <td>
+                                <div>{{ video.status }}</div>
                             </td>
-                            <td class="column-container">
-                                <div class="table-cell">{{ video.status }}</div>
+                            <td>
+                                <div>{{ video.privacy }}</div>
                             </td>
-                            <td class="column-container">
-                                <div class="table-cell">{{ video.file_name }}</div>
+                            <td>
+                                <div>{{ video.view_count }}</div>
                             </td>
-                            <td class="column-container">
-                                <div class="table-cell">{{ video.youtube_id }}</div>
-                            </td>
-                            <td class="column-container">
-                                <div class="table-cell">{{ video.privacy }}</div>
-                            </td>
-                            <td class="column-container">
-                                <div class="table-cell">{{ video.file_base }}</div>
+                            <td>
+                                <div>{{ video.file_base }}</div>
                             </td>
                         </tr>
                     {% endfor %}

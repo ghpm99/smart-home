@@ -26,9 +26,8 @@ def video(request):
         'name': video.name or video.title,
         'description': video.description,
         'status': status.get(video.status),
-        'file_name': video.file_name or '',
-        'youtube_id': video.youtube_id or '',
         'privacy': video.privacy_status or '',
+        'view_count': video.view_count or '-',
         'file_base': video.file_base or '',
     } for video in page_obj.object_list]
 

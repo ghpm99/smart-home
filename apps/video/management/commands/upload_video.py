@@ -62,6 +62,7 @@ class Command(BaseCommand):
                     status, response = insert_request.next_chunk()
                     if response is not None:
                         if 'id' in response:
+                            print(response)
                             video.youtube_id = response['id']
                             print("Video id '%s' was successfully uploaded." %
                                   response['id'])

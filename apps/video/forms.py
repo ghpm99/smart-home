@@ -9,7 +9,10 @@ class UploadFileForm(forms.Form):
         attrs={'class': "form-control"}
     ))
     description = forms.CharField(max_length=5000, label='Descrição', widget=forms.Textarea(
-        attrs={'class': "form-control"}
+        attrs={
+            'class': "form-control",
+            'rows': 4
+        }
     ))
     keywords = forms.CharField(max_length=500, label='Tags Youtube', widget=forms.TextInput(
         attrs={'class': "form-control"}
