@@ -133,7 +133,7 @@ class Command(BaseCommand):
                     privacyStatus=privacy
                 ),
                 statistics=dict(
-                    viewCount=''
+                    viewCount=0
                 )
             )
             print('Criando request')
