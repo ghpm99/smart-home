@@ -55,9 +55,11 @@ class Command(BaseCommand):
 
             for youtube_data in response.get('items'):
                 video_youtube = Video.objects.filter(youtube_id=youtube_data.get('id')).first()
+
                 video_status = youtube_data.get('status')
                 video_youtube.upload_status = video_status.get('uploadStatus')
                 video_youtube.privacy_status = video_status.get('privacyStatus')
+
                 video_statistics = youtube_data.get('statistics')
                 video_youtube.view_count = video_statistics.get('viewCount')
                 video_youtube.like_count = video_statistics.get('likeCount')

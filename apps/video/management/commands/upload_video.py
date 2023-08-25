@@ -62,8 +62,17 @@ class Command(BaseCommand):
                     status, response = insert_request.next_chunk()
                     if response is not None:
                         if 'id' in response:
-                            print(response)
-                            video.youtube_id = response['id']
+                            video.youtube_id = response.get('id')
+                            video_status = response.get('status')
+                            video.upload_status = video_status.get('uploadStatus')
+                            video.privacy_status = video_status.get('privacyStatus')
+
+                            video_statistics = response.get('statistics')
+                            video.view_count = video_statistics.get('viewCount')
+                            video.like_count = video_statistics.get('likeCount')
+                            video.dislike_count = video_statistics.get('dislikeCount')
+                            video.comment_count = video_statistics.get('commentCount')
+
                             print("Video id '%s' was successfully uploaded." %
                                   response['id'])
                         else:
@@ -122,6 +131,9 @@ class Command(BaseCommand):
                 ),
                 status=dict(
                     privacyStatus=privacy
+                ),
+                statistics=dict(
+                    viewCount=''
                 )
             )
             print('Criando request')
