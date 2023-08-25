@@ -66,7 +66,7 @@ class Command(BaseCommand):
                 video_youtube.dislike_count = video_statistics.get('dislikeCount')
                 video_youtube.comment_count = video_statistics.get('commentCount')
                 video_youtube.save()
-            current_page +=1
+            current_page += 1
 
     def handle(self, *args, **options):
         begin = time.time()

@@ -5,165 +5,272 @@
 {% endblock head_bottom %}
 {% block content %}
     <div class="controllers">
-        <div class="form-container">
-            <form class="form"
-                  action="{% url 'video' %}"
-                  method="post"
-                  enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form }}
-                <input class="submit-button" type="submit" value="Fazer upload" />
-            </form>
-        </div>
-        <div class="form-container">
-            <div class="title">Template</div>
-            <select id="template">
-                <option value="default">-</option>
-                <option value="solare">Solare</option>
-            </select>
-            <div id="template-option">
-                <div id="default"></div>
-                <div id="solare">
-                    <div class="team">
-                        <div>Time 1</div>
-                        <div class="player">
-                            <div>Personagem 1:</div>
-                            <input id="player1" value="DragaoVermelho" />
-                            <div>Classe:</div>
-                            <select id="class1">
-                                {% for class_option in class_options %}
-                                    <option {% if class_option.value == "Witch" %}selected{% endif %}
-                                            value="{{ class_option.value }}">{{ class_option.label }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="player">
-                            <div>Personagem 2:</div>
-                            <input id="player2" />
-                            <div>Classe:</div>
-                            <select id="class2">
-                                {% for class_option in class_options %}
-                                    <option value="{{ class_option.value }}">{{ class_option.label }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="player">
-                            <div>Personagem 3:</div>
-                            <input id="player3" />
-                            <div>Classe:</div>
-                            <select id="class3">
-                                {% for class_option in class_options %}
-                                    <option value="{{ class_option.value }}">{{ class_option.label }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+        <div class="card">
+            <div class="card-body">
+                <form action="{% url 'video' %}"
+                      method="post"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ form.name.errors }}
+                        <label class="form-label" for="{{ form.name.id_for_label }}">Nome do video:</label>
+                        {{ form.name }}
                     </div>
-                    <div class="team">
-                        <div>Time 2</div>
-                        <div class="player">
-                            <div>Personagem 1:</div>
-                            <input id="player4" />
-                            <div>Classe:</div>
-                            <select id="class4">
-                                {% for class_option in class_options %}
-                                    <option value="{{ class_option.value }}">{{ class_option.label }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="player">
-                            <div>Personagem 2:</div>
-                            <input id="player5" />
-                            <div>Classe:</div>
-                            <select id="class5">
-                                {% for class_option in class_options %}
-                                    <option value="{{ class_option.value }}">{{ class_option.label }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="player">
-                            <div>Personagem 3:</div>
-                            <input id="player6" />
-                            <div>Classe:</div>
-                            <select id="class6">
-                                {% for class_option in class_options %}
-                                    <option value="{{ class_option.value }}">{{ class_option.label }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                    <div class="mb-3">
+                        {{ form.title.errors }}
+                        <label class="form-label" for="{{ form.title.id_for_label }}">Titulo do video:</label>
+                        {{ form.title }}
                     </div>
-                    <button onclick="applySolareTemplate()">Aplicar</button>
-                </div>
+                    <div class="mb-3">
+                        {{ form.description.errors }}
+                        <label class="form-label" for="{{ form.description.id_for_label }}">Descrição do video:</label>
+                        {{ form.description }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.keywords.errors }}
+                        <label class="form-label" for="{{ form.keywords.id_for_label }}">Tags do video:</label>
+                        {{ form.keywords }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.file.errors }}
+                        <label class="form-label" for="{{ form.file.id_for_label }}">Arquivo do video:</label>
+                        {{ form.file }}
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <input class="btn btn-primary" type="submit" value="Fazer upload" />
+                        <button type="button"
+                                class="btn btn-secondary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#templateModal">Templates</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-    <div class="table-container">
-        <table class="table">
-            <thead class="table-head">
-                <tr>
-                    <th class="table-head-column">ID</th>
-                    <th class="table-head-column">Nome</th>
-                    <th class="table-head-column">Status</th>
-                    <th class="table-head-column">File Name</th>
-                    <th class="table-head-column">Youtube Id</th>
-                    <th class="table-head-column">Youtube Privacidade</th>
-                    <th class="table-head-column">Arquivo de base</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for video in videos %}
-                    <tr class="table-row">
-                        <td class="column-container">
-                            <div class="table-cell">{{ video.id }}</div>
-                        </td>
-                        <td class="column-container">
-                            <div class="table-cell">{{ video.name }}</div>
-                        </td>
-                        <td class="column-container">
-                            <div class="table-cell">{{ video.status }}</div>
-                        </td>
-                        <td class="column-container">
-                            <div class="table-cell">{{ video.file_name }}</div>
-                        </td>
-                        <td class="column-container">
-                            <div class="table-cell">{{ video.youtube_id }}</div>
-                        </td>
-                        <td class="column-container">
-                            <div class="table-cell">{{ video.privacy }}</div>
-                        </td>
-                        <td class="column-container">
-                            <div class="table-cell">{{ video.file_base }}</div>
-                        </td>
+    <div class="card">
+        <div class="card-body table-container">
+            <table class="table">
+                <thead class="table-head">
+                    <tr>
+                        <th class="table-head-column">ID</th>
+                        <th class="table-head-column">Nome</th>
+                        <th class="table-head-column">Status</th>
+                        <th class="table-head-column">File Name</th>
+                        <th class="table-head-column">Youtube Id</th>
+                        <th class="table-head-column">Youtube Privacidade</th>
+                        <th class="table-head-column">Arquivo de base</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% if videos.has_other_pages %}
-            <nav aria-label="Navegação tabela video">
-                <ul class="pagination justify-content-end">
-                    {% if videos.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ videos.previous_page_number }}" tabindex="-1">Anterior</a>
-                        </li>
-                    {% endif %}
-                    {% for page_number in videos.paginator.page_range %}
-                        {% if videos.number == page_number %}
+                </thead>
+                <tbody>
+                    {% for video in videos %}
+                        <tr class="table-row">
+                            <td class="column-container">
+                                <div class="table-cell">{{ video.id }}</div>
+                            </td>
+                            <td class="column-container">
+                                <div class="table-cell">{{ video.name }}</div>
+                            </td>
+                            <td class="column-container">
+                                <div class="table-cell">{{ video.status }}</div>
+                            </td>
+                            <td class="column-container">
+                                <div class="table-cell">{{ video.file_name }}</div>
+                            </td>
+                            <td class="column-container">
+                                <div class="table-cell">{{ video.youtube_id }}</div>
+                            </td>
+                            <td class="column-container">
+                                <div class="table-cell">{{ video.privacy }}</div>
+                            </td>
+                            <td class="column-container">
+                                <div class="table-cell">{{ video.file_base }}</div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% if videos.has_other_pages %}
+                <nav aria-label="Navegação tabela video">
+                    <ul class="pagination justify-content-end">
+                        {% if videos.has_previous %}
                             <li class="page-item">
-                                <a class="page-link" href="#">{{ page_number }}<span class="sr-only">(Atual)</span></a>
-                            </li>
-                        {% else %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                                <a class="page-link"
+                                   href="?page={{ videos.previous_page_number }}"
+                                   tabindex="-1">Anterior</a>
                             </li>
                         {% endif %}
-                    {% endfor %}
-                    {% if videos.has_next %}
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ videos.next_page_number }}">Proxima</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </nav>
-        {% endif %}
+                        {% for page_number in videos.paginator.page_range %}
+                            {% if videos.number == page_number %}
+                                <li class="page-item">
+                                    <a class="page-link" href="#">{{ page_number }}<span class="sr-only">(Atual)</span></a>
+                                </li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if videos.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ videos.next_page_number }}">Proxima</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+    </div>
+    <div class="modal fade"
+         id="templateModal"
+         tabindex="-1"
+         aria-labelledby="templateModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="templateModalLabel">Template</h1>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div>Template</div>
+                        <select id="template" class="form-select">
+                            <option value="default">-</option>
+                            <option value="solare">Solare</option>
+                        </select>
+                        <div id="template-option">
+                            <div id="default"></div>
+                            <div id="solare">
+                                <div>
+                                    <div>Time 1</div>
+                                    <div class="mb-3">
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Personagem 1:</div>
+                                            <div class="col-sm-8">
+                                                <input id="player1" class="form-control" value="DragaoVermelho" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Classe:</div>
+                                            <div class="col-sm-8">
+                                                <select id="class1" class="form-select">
+                                                    {% for class_option in class_options %}
+                                                        <option
+                                                            {% if class_option.value == "Witch" %}selected{% endif %}
+                                                             value="{{ class_option.value }}"
+                                                        >{{ class_option.label }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Personagem 2:</div>
+                                            <div class="col-sm-8">
+                                                <input id="player2" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Classe:</div>
+                                            <div class="col-sm-8">
+                                                <select id="class2" class="form-select">
+                                                    {% for class_option in class_options %}
+                                                        <option value="{{ class_option.value }}">{{ class_option.label }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Personagem 3:</div>
+                                            <div class="col-sm-8">
+                                                <input id="player3" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Classe:</div>
+                                            <div class="col-sm-8">
+                                                <select id="class3" class="form-select">
+                                                    {% for class_option in class_options %}
+                                                        <option value="{{ class_option.value }}">{{ class_option.label }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div>Time 2</div>
+                                    <div class="mb-3">
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Personagem 1:</div>
+                                            <div class="col-sm-8">
+                                                <input id="player4" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Classe:</div>
+                                            <div class="col-sm-8">
+                                                <select id="class4" class="form-select">
+                                                    {% for class_option in class_options %}
+                                                        <option value="{{ class_option.value }}">{{ class_option.label }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Personagem 2:</div>
+                                            <div class="col-sm-8">
+                                                <input id="player5" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Classe:</div>
+                                            <div class="col-sm-8">
+                                                <select id="class5" class="form-select">
+                                                    {% for class_option in class_options %}
+                                                        <option value="{{ class_option.value }}">{{ class_option.label }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Personagem 3:</div>
+                                            <div class="col-sm-8">
+                                                <input id="player6" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Classe:</div>
+                                            <div class="col-sm-8">
+                                                <select id="class6" class="form-select">
+                                                    {% for class_option in class_options %}
+                                                        <option value="{{ class_option.value }}">{{ class_option.label }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" onclick="applySolareTemplate()">Aplicar</button>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock content %}
 {% block body_bottom %}
@@ -217,6 +324,7 @@
                 `Black Desert Online,Arena Solare,Luta Competitiva,Batalha Épica,${player1},${player2},${player3},${player4},${player5},${player6},PvP,Estratégia,Combate,MMO,Jogo Online,Ação,Emoção,${class1PT},${class1EUA},${class2PT},${class2EUA},${class3PT},${class3EUA},${class4PT},${class4EUA},${class5PT},${class5EUA},${class6PT},${class6EUA},`
             )
             $('#id_name').val(`${player1} ${player2} ${player3} Vs ${player4} ${player5} ${player6}`)
+            $('#templateModal').modal('hide')
         }
     </script>
 {% endblock body_bottom %}

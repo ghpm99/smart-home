@@ -11,20 +11,6 @@ body {
 	justify-content: space-evenly;
 }
 
-.form-container{
-	background-color: #222831;
-    border-radius: 20px;
-    padding: 16px;
-    margin-bottom: 16px;
-}
-
-.form {
-	max-width: 500px;
-	display: flex;
-    flex-direction: column;
-    color: #fff;
-}
-
 label{
     margin-top: 6px;
 }
