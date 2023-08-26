@@ -47,7 +47,6 @@ class Command(BaseCommand):
 
             youtube_id_separator = separator.join(videos_id)
 
-
             request = youtube.videos().list(
                 part="statistics,status",
                 id=youtube_id_separator

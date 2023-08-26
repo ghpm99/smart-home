@@ -2,6 +2,7 @@
 import http.client
 import random
 import time
+from datetime import datetime
 
 import httplib2
 from django.conf import settings
@@ -66,6 +67,10 @@ class Command(BaseCommand):
                             video_status = response.get('status')
                             video.upload_status = video_status.get('uploadStatus')
                             video.privacy_status = video_status.get('privacyStatus')
+                            publish_at = video_status.get('publishAt')
+                            if publish_at is not None:
+                                publish_date = datetime.fromisoformat(publish_at.replace('Z', '+00:00'))
+                                video.publish_at = publish_date
 
                             video_statistics = response.get('statistics')
                             video.view_count = video_statistics.get('viewCount')
@@ -130,7 +135,8 @@ class Command(BaseCommand):
                     categoryId=category
                 ),
                 status=dict(
-                    privacyStatus=privacy
+                    privacyStatus=privacy,
+                    publishAt=video.publish_at.strftime('%Y-%m-%dT%H:%M:%SZ')
                 ),
                 statistics=dict(
                     viewCount=0
