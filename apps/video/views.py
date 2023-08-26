@@ -1,4 +1,6 @@
 import platform
+from datetime import timedelta
+
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -48,13 +50,20 @@ def new_video(request):
         if form.is_valid():
             req = request.POST
             file = request.FILES["file"]
+
+            last_date = Video.objects.order_by('publish_at').last().publish_at
+            last_date += timedelta(hours=4)
+            if last_date.hour > 3 and last_date.hour < 14:
+                last_date += timedelta(hours=8)
+
             video = Video(
                 video=file,
                 name=req.get('name'),
                 title=req.get('title'),
                 description=req.get('description'),
                 keywords=req.get('keywords'),
-                file_base=file.name
+                file_base=file.name,
+                publish_at=last_date
             )
             video.save()
             return HttpResponseRedirect("/video/")
