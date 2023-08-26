@@ -1,11 +1,9 @@
 
 import time
-from datetime import datetime, timedelta
 
 import httplib2
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from django.core.paginator import Paginator
 from googleapiclient.discovery import build
 from oauth2client.file import Storage
 from video.models import Video
@@ -33,7 +31,6 @@ class Command(BaseCommand):
 
         youtube = get_authenticated_service()
         videos = Video.objects.filter(status=Video.S_SUCCESS).exclude(privacy_status='public').order_by('id').all()
-        publish_at = datetime(2023, 8, 28, 00, 00, 00)
 
         for video in videos:
             request = youtube.videos().update(
@@ -42,14 +39,13 @@ class Command(BaseCommand):
                     "id": video.youtube_id,
                     "status": {
                         "privacyStatus": "private",
-                        "publishAt": publish_at.strftime('%Y-%m-%dT%H:%M:%SZ')
+                        "publishAt": video.publish_at.strftime('%Y-%m-%dT%H:%M:%SZ')
                     }
                 }
             )
             response = request.execute()
 
             print(response)
-            publish_at += timedelta(hours=6)
 
     def handle(self, *args, **options):
         begin = time.time()

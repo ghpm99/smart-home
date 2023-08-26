@@ -10,6 +10,7 @@
                         <th scope="col">Nome</th>
                         <th scope="col">Status</th>
                         <th scope="col">Youtube Privacidade</th>
+                        <th scope="col">Publicado em</th>
                         <th scope="col">Visualizações</th>
                         <th scope="col">Arquivo de base</th>
                     </tr>
@@ -28,6 +29,9 @@
                             </td>
                             <td>
                                 <div>{{ video.privacy }}</div>
+                            </td>
+                            <td>
+                                <div>{{ video.publish_at|date:"d/m/Y H:i" }}</div>
                             </td>
                             <td>
                                 <div>{{ video.view_count }}</div>
