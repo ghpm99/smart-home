@@ -19,6 +19,7 @@ class Command(BaseCommand):
         print('Verificando serviços')
 
         r = requests.get(settings.KAWORI_API)
+        requests.post(settings.WEBHOOK_URL, json={'content': r.text})
         if r.status_code != 200:
             requests.post(settings.WEBHOOK_URL, json={'content': 'Serviço offline'})
 
