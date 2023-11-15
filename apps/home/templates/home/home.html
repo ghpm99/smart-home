@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="background">teste</div>
+    <div>Uso de CPU: {{ cpu_percent }}</div>
+    {% for disk in disk_partitions %}
+        <div>device: {{ disk.device }}</div>
+        <div>mount point: {{ disk.mountpoint }}</div>
+        <div>fs type: {{ disk.fstype }}</div>
+        <div>opts: {{ disk.opts }}</div>
+    {% endfor %}
 {% endblock content %}
