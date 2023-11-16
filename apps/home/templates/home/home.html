@@ -1,11 +1,21 @@
 {% extends "base.html" %}
-
 {% block content %}
     <div>Uso de CPU: {{ cpu_percent }}</div>
+    <div class="d-flex justify-content-between">
     {% for disk in disk_partitions %}
-        <div>device: {{ disk.device }}</div>
-        <div>mount point: {{ disk.mountpoint }}</div>
-        <div>fs type: {{ disk.fstype }}</div>
-        <div>opts: {{ disk.opts }}</div>
+        <div class="card">
+            <div class="card-header">
+                <div>device: {{ disk.device }}</div>
+            </div>
+            <div>total: {{ disk.usage.total }}</div>
+            <div>used: {{ disk.usage.used }}</div>
+            <div>free: {{ disk.usage.free }}</div>
+            <div class="card-body">
+                <div>mount point: {{ disk.mountpoint }}</div>
+                <div>fs type: {{ disk.fstype }}</div>
+                <div>opts: {{ disk.opts }}</div>
+            </div>
+        </div>
     {% endfor %}
+    </div>
 {% endblock content %}
