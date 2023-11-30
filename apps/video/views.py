@@ -1,6 +1,7 @@
 import platform
-from datetime import timedelta, datetime
+from datetime import datetime, timedelta
 
+import pytz
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -52,8 +53,10 @@ def new_video(request):
             file = request.FILES["file"]
 
             last_date = Video.objects.order_by('publish_at').last().publish_at
-            if last_date < datetime.now():
-                last_date = datetime.strptime('2023-12-01 19:00:00')
+            now = datetime.now(pytz.utc)
+            if last_date < now:
+                last_date = datetime.strptime('2023-12-01 19:00:00', '%Y-%m-%d %H:%M:%S')
+                last_date = pytz.utc.localize(last_date)
             else:
                 last_date += timedelta(days=1)
 
