@@ -8,4 +8,5 @@
 		"editor.defaultFormatter": "monosans.djlint"
 	},
 	"cSpell.enabled": true,
+	"python.analysis.autoImportCompletions": true,
 }

@@ -53,7 +53,7 @@ def new_video(request):
 
             last_date = Video.objects.order_by('publish_at').last().publish_at
             if last_date < datetime.now():
-                last_date = datetime.strptime('2023-12-01')
+                last_date = datetime.strptime('2023-12-01 19:00:00')
             else:
                 last_date += timedelta(days=1)
 
