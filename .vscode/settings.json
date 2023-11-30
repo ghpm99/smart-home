@@ -7,4 +7,5 @@
 	"[django-html]": {
 		"editor.defaultFormatter": "monosans.djlint"
 	},
+	"cSpell.enabled": true,
 }

@@ -1,5 +1,5 @@
 import platform
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
@@ -52,9 +52,10 @@ def new_video(request):
             file = request.FILES["file"]
 
             last_date = Video.objects.order_by('publish_at').last().publish_at
-            last_date += timedelta(hours=4)
-            if last_date.hour > 3 and last_date.hour < 14:
-                last_date += timedelta(hours=8)
+            if last_date < datetime.now():
+                last_date = datetime.strptime('2023-12-01')
+            else:
+                last_date += timedelta(days=1)
 
             video = Video(
                 video=file,
