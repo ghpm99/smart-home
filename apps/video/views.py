@@ -55,8 +55,7 @@ def new_video(request):
             last_date = Video.objects.order_by('publish_at').last().publish_at
             now = datetime.now(pytz.utc)
             if last_date < now:
-                last_date = datetime.strptime('2023-12-01 19:00:00', '%Y-%m-%d %H:%M:%S')
-                last_date = pytz.utc.localize(last_date)
+                last_date = now.replace(hour=19, minute=0, second=0) + timedelta(days=2)
             else:
                 last_date += timedelta(days=1)
 
