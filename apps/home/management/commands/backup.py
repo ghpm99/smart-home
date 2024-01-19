@@ -1,14 +1,14 @@
 import os
-import shutil
 import time
+import zipfile
 from datetime import datetime
 from pathlib import Path
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from home.models import File
-from django.utils import timezone
 from django.db.models import F, Q
+from django.utils import timezone
+from home.models import File
 
 
 class Command(BaseCommand):
@@ -18,12 +18,39 @@ class Command(BaseCommand):
 
     def run_command(self):
 
+        def compress(backup_file, file_names):
+            print(f'Comprimindo {len(file_names)} arquivos')
+
+            # Select the compression mode ZIP_DEFLATED for compression
+            # or zipfile.ZIP_STORED to just store the file
+            compression = zipfile.ZIP_DEFLATED
+
+            # create the zip file first parameter path/name, second mode
+            zf = zipfile.ZipFile(f'{settings.BACKUP_FOLDER}{backup_file}', mode="w")
+            try:
+                for index, file_name in enumerate(file_names):
+                    # Add file to the zip file
+                    # first parameter file to zip, second filename in zip
+                    print(f'Comprimindo arquivo {index + 1} de {len(file_names)}')
+                    source_file = file_name
+                    target_file = file_name.replace(settings.SHARED_FOLDER, settings.BACKUP_FOLDER)
+                    zf.write(source_file, target_file, compress_type=compression)
+
+            except FileNotFoundError:
+                print("An error occurred")
+            finally:
+                # Don't forget to close the file!
+                zf.close()
+
         print('Iniciando backup de arquivos')
         backup_start = datetime.now(tz=timezone.utc)
         meta_data = f'bkp_{backup_start.strftime("%Y%m%d_%H%M%S")}.txt'
         Path(settings.BACKUP_FOLDER).mkdir(parents=True, exist_ok=True)
 
         for root, dirs, files in os.walk(settings.SHARED_FOLDER):
+
+            if root.endswith('Backup'):
+                continue
 
             for file in files:
                 new_file, created = File.objects.get_or_create(
@@ -55,12 +82,12 @@ class Command(BaseCommand):
                 f.write(f'{file.path}{file.name}\n')
             f.close()
 
+        file_names = [f'{file_to_backup.path}/{file_to_backup.name}' for file_to_backup in files_to_backup]
+        compress(f'bkp_{backup_start.strftime("%Y%m%d_%H%M%S")}.zip', file_names)
+
         for file_to_backup in files_to_backup:
-            dir = file_to_backup.path.replace(settings.SHARED_FOLDER, settings.BACKUP_FOLDER)
-            Path(dir).mkdir(parents=True, exist_ok=True)
-            target_file = f'{file_to_backup.path}/{file_to_backup.name}'
-            print(f'Copiando {target_file} para {dir}')
-            shutil.copy(target_file, dir)
+            file_to_backup.last_backup = backup_start
+            file_to_backup.save()
 
         print('Concluiu')
 
