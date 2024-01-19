@@ -133,6 +133,9 @@ MISSING_CLIENT_SECRETS_MESSAGE = "WARNING: Please configure OAuth 2.0"
 YOUTUBE_API_SERVICE_NAME = "youtube"
 YOUTUBE_API_VERSION = "v3"
 
+SHARED_FOLDER = ''
+BACKUP_FOLDER = os.path.join(BASE_DIR, 'backup/')
+
 try:
     from djhome.local_settings import *  # noqa: F403, F401
 except ImportError:
