@@ -33,7 +33,7 @@ class Command(BaseCommand):
                     # first parameter file to zip, second filename in zip
                     print(f'Comprimindo arquivo {index + 1} de {len(file_names)}')
                     source_file = file_name
-                    target_file = file_name.replace(settings.SHARED_FOLDER, settings.BACKUP_FOLDER)
+                    target_file = file_name.replace(settings.SHARED_FOLDER, '')
                     zf.write(source_file, target_file, compress_type=compression)
 
             except FileNotFoundError:
