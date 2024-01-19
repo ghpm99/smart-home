@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 from pathlib import Path
 import time
@@ -33,15 +34,15 @@ class Command(BaseCommand):
                 if created:
                     print(f'Arquivo {file} criado')
 
-                with open(file, 'w+', encoding='utf-8') as f:
+                with open(f'{dir}/{file}.bkp', 'w+', encoding='utf-8') as f:
                     data = {
                         'id': new_file.id,
                         'name': new_file.name,
                         'path': new_file.path,
                         'format': new_file.format,
                         'size': os.path.getsize(f'{root}/{file}'),
-                        'last_modified': time.ctime(os.path.getmtime(f'{root}/{file}')),
-                        'created': time.ctime(os.path.getctime(f'{root}/{file}'))
+                        'last_modified': datetime.fromtimestamp(os.path.getmtime(f'{root}/{file}')).strftime('%Y-%m-%dT%H:%M:%S'),
+                        'created': datetime.fromtimestamp(os.path.getctime(f'{root}/{file}')).strftime('%Y-%m-%dT%H:%M:%S')
                     }
                     json.dump(data, f, ensure_ascii=False, indent=4)
 
