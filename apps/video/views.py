@@ -5,6 +5,7 @@ import pytz
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.db.models import Q
 
 from .forms import UploadFileForm
 from .models import Video
@@ -54,21 +55,35 @@ def new_video(request):
         if form.is_valid():
             req = request.POST
             file = request.FILES["file"]
+            type = int(req.get('type') or 0)
+            name = req.get('name')
+            title = req.get('title'),
 
-            last_date = Video.objects.order_by('publish_at').last().publish_at
-            now = datetime.now(pytz.utc)
-            if last_date < now:
-                last_date = now.replace(hour=19, minute=0, second=0) + timedelta(days=2)
+            if type is Video.T_SOLARE_RANKED or type is Video.T_SOLARE_PRACTICE:
+                last_date = Video.objects.filter(
+                    Q(type=Video.T_SOLARE_RANKED) | Q(type=Video.T_SOLARE_PRACTICE)
+                ).order_by('publish_at').last().publish_at
+
+                now = datetime.now(pytz.utc)
+                if last_date < now:
+                    last_date = now.replace(hour=19, minute=0, second=0) + timedelta(days=2)
+                else:
+                    last_date += timedelta(days=1)
             else:
-                last_date += timedelta(days=1)
+                last_date = None
+
+            if type is Video.T_BACKUP:
+                name = f'Backup {file.name}'
+                title = file.name
 
             video = Video(
                 video=file,
-                name=req.get('name'),
-                title=req.get('title'),
+                name=name,
+                title=title,
                 description=req.get('description'),
                 keywords=req.get('keywords'),
                 file_base=file.name,
+                type=type,
                 publish_at=last_date
             )
             video.save()
