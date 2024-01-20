@@ -126,7 +126,7 @@ class Command(BaseCommand):
 
             status_video = dict(
                 privacyStatus=privacy
-            ),
+            )
 
             if video.type is Video.T_SOLARE_RANKED or video.type is Video.T_SOLARE_PRACTICE:
                 status_video['publishAt'] = video.publish_at.strftime('%Y-%m-%dT%H:%M:%SZ')
