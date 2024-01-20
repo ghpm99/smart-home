@@ -24,11 +24,14 @@ def video(request):
 
     status = dict(Video.STATUS)
 
+    types = dict(Video.TYPES)
+
     videos_data = [{
         'id': video.id,
         'name': video.name or video.title,
         'description': video.description,
         'status': status.get(video.status),
+        'type': types.get(video.type),
         'privacy': video.privacy_status or '',
         'publish_at': video.publish_at,
         'view_count': video.view_count or '-',
@@ -102,10 +105,13 @@ def new_video(request):
         {'value': 'Woosa', 'label': 'Wu-sa'},
     ]
 
+    video_types_options = [{'value': video_type[0], 'label': video_type[1]} for video_type in Video.TYPES]
+
     ctx = {
         'computer_name': platform.node(),
         "form": form,
         "class_options": class_options,
+        'types_options': video_types_options
     }
 
     return render(request, "video/new_video.html", ctx)

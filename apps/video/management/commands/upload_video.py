@@ -78,16 +78,14 @@ class Command(BaseCommand):
                             video.dislike_count = video_statistics.get('dislikeCount')
                             video.comment_count = video_statistics.get('commentCount')
 
-                            print("Video id '%s' was successfully uploaded." %
-                                  response['id'])
+                            print("Video id '%s' was successfully uploaded." % response['id'])
                         else:
                             video.status = Video.S_FAIL
                             exit(
                                 "The upload failed with an unexpected response: %s" % response)
                 except HttpError as e:
                     if e.resp.status in RETRIABLE_STATUS_CODES:
-                        error = "A retriable HTTP error %d occurred:\n%s" % (e.resp.status,
-                                                                             e.content)
+                        error = "A retriable HTTP error %d occurred:\n%s" % (e.resp.status, e.content)
                     else:
                         raise
                 except RETRIABLE_EXCEPTIONS as e:
@@ -101,8 +99,7 @@ class Command(BaseCommand):
 
                     max_sleep = 2 ** retry
                     sleep_seconds = random.random() * max_sleep
-                    print("Sleeping %f seconds and then retrying..." %
-                          sleep_seconds)
+                    print("Sleeping %f seconds and then retrying..." % sleep_seconds)
                     time.sleep(sleep_seconds)
 
         category = '20'
@@ -127,6 +124,14 @@ class Command(BaseCommand):
             print('Gerando youtube build')
             video_title = f"{video.title} #{video.id}"
 
+            status_video = dict(
+                privacyStatus=privacy,
+                publishAt=video.publish_at.strftime('%Y-%m-%dT%H:%M:%SZ')
+            ),
+
+            if video.type is Video.T_SOLARE_RANKED or video.type is Video.T_SOLARE_PRACTICE:
+                status_video['publishAt'] = video.publish_at.strftime('%Y-%m-%dT%H:%M:%SZ')
+
             body = dict(
                 snippet=dict(
                     title=video_title,
@@ -134,10 +139,7 @@ class Command(BaseCommand):
                     tags=tags,
                     categoryId=category
                 ),
-                status=dict(
-                    privacyStatus=privacy,
-                    publishAt=video.publish_at.strftime('%Y-%m-%dT%H:%M:%SZ')
-                ),
+                status=status_video,
                 statistics=dict(
                     viewCount=0
                 )

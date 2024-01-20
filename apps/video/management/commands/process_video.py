@@ -34,26 +34,36 @@ class Command(BaseCommand):
                 video.file_name = str(uuid.uuid4())[:32]
             video.save()
 
+            output_file_name = f"{str(settings.BASE_DIR)}/output/{video.file_name}.mp4"
+
             try:
                 print('Buscando arquivo de video')
                 clip = VideoFileClip(
                     f'{str(settings.BASE_DIR)}{video.video.url}'
                 )
 
-                print('Buscando gif de overlay')
-                image_gif = (VideoFileClip(f'{str(settings.BASE_DIR)}/media/image/original.gif', has_mask=True)
-                             .loop()
-                             .set_duration(clip.duration)
-                             .resize(width=732, height=513)
-                             .set_position((12, 927)))
+                if video.type is Video.T_SOLARE_RANKED or video.type is Video.T_SOLARE_PRACTICE:
+                    print('Buscando gif de overlay')
+                    image_gif = (
+                        VideoFileClip(f'{str(settings.BASE_DIR)}/media/image/original.gif', has_mask=True)
+                        .loop()
+                        .set_duration(clip.duration)
+                        .resize(width=732, height=513)
+                        .set_position((12, 927))
+                    )
 
-                print('Mesclando video e overlay')
-                video_composite = CompositeVideoClip([clip, image_gif])
+                    print('Mesclando video e overlay')
+                    video_composite = CompositeVideoClip([clip, image_gif])
 
-                print('Renderizando video')
-                video_composite.write_videofile(
-                    f"{str(settings.BASE_DIR)}/output/{video.file_name}.mp4", fps=60
-                )
+                    print('Renderizando video')
+                    video_composite.write_videofile(
+                        output_file_name, fps=60
+                    )
+                else:
+                    print('Renderizando video')
+                    clip.write_videofile(
+                        output_file_name, fps=60
+                    )
 
                 print('Processo concluido')
                 video.status = Video.S_PROCESSING_SUCCESS

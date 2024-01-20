@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% block content %}
     <div class="controllers">
         <div class="card my-2">
@@ -27,6 +26,11 @@
                         {{ form.keywords.errors }}
                         <label class="form-label" for="{{ form.keywords.id_for_label }}">Tags do video:</label>
                         {{ form.keywords }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.type.errors }}
+                        <label class="form-label" for="{{ form.type.id_for_label }}">Tipo de video:</label>
+                        {{ form.type }}
                     </div>
                     <div class="mb-3">
                         {{ form.file.errors }}
@@ -63,11 +67,13 @@
                         <div>Template</div>
                         <select id="template" class="form-select">
                             <option value="default">-</option>
-                            <option value="solare">Solare</option>
+                            <option value="solare-ranked">Solare Ranked</option>
+                            <option value="solare-practice">Solare Treino</option>
+                            <option value="backup">Backup</option>
                         </select>
                         <div id="template-option">
                             <div id="default"></div>
-                            <div id="solare">
+                            <div id="solare-ranked">
                                 <div>
                                     <div>Time 1</div>
                                     <div class="mb-3">
@@ -185,13 +191,142 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                    <button type="button" class="btn btn-primary" onclick="applySolareRankedTemplate()">Aplicar</button>
+                                </div>
+                            </div>
+                            <div id="solare-practice">
+                                <div>
+                                    <div>Time 1</div>
+                                    <div class="mb-3">
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Personagem 1:</div>
+                                            <div class="col-sm-8">
+                                                <input id="player1" class="form-control" value="DragaoVermelho" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Classe:</div>
+                                            <div class="col-sm-8">
+                                                <select id="class1" class="form-select">
+                                                    {% for class_option in class_options %}
+                                                        <option {% if class_option.value == "Witch" %}selected{% endif %}
+                                                                value="{{ class_option.value }}">
+                                                            {{ class_option.label }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Personagem 2:</div>
+                                            <div class="col-sm-8">
+                                                <input id="player2" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Classe:</div>
+                                            <div class="col-sm-8">
+                                                <select id="class2" class="form-select">
+                                                    {% for class_option in class_options %}
+                                                        <option value="{{ class_option.value }}">{{ class_option.label }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Personagem 3:</div>
+                                            <div class="col-sm-8">
+                                                <input id="player3" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Classe:</div>
+                                            <div class="col-sm-8">
+                                                <select id="class3" class="form-select">
+                                                    {% for class_option in class_options %}
+                                                        <option value="{{ class_option.value }}">{{ class_option.label }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div>Time 2</div>
+                                    <div class="mb-3">
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Personagem 1:</div>
+                                            <div class="col-sm-8">
+                                                <input id="player4" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Classe:</div>
+                                            <div class="col-sm-8">
+                                                <select id="class4" class="form-select">
+                                                    {% for class_option in class_options %}
+                                                        <option value="{{ class_option.value }}">{{ class_option.label }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Personagem 2:</div>
+                                            <div class="col-sm-8">
+                                                <input id="player5" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Classe:</div>
+                                            <div class="col-sm-8">
+                                                <select id="class5" class="form-select">
+                                                    {% for class_option in class_options %}
+                                                        <option value="{{ class_option.value }}">{{ class_option.label }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Personagem 3:</div>
+                                            <div class="col-sm-8">
+                                                <input id="player6" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4 col-form-label">Classe:</div>
+                                            <div class="col-sm-8">
+                                                <select id="class6" class="form-select">
+                                                    {% for class_option in class_options %}
+                                                        <option value="{{ class_option.value }}">{{ class_option.label }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                    <button type="button" class="btn btn-primary" onclick="applySolarePracticeTemplate()">Aplicar</button>
+                                </div>
+                            </div>
+                            <div id="backup">
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                    <button type="button" class="btn btn-primary" onclick="applyBackupTemplate()">Aplicar</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary" onclick="applySolareTemplate()">Aplicar</button>
                 </div>
             </div>
         </div>
@@ -209,7 +344,7 @@
         $('#template').change()
     </script>
     <script type="text/javascript">
-        function applySolareTemplate() {
+        function applySolareRankedTemplate() {
             const player1 = $('#player1').val()
             const player2 = $('#player2').val()
             const player3 = $('#player3').val()
@@ -247,7 +382,59 @@
             $('#id_keywords').val(
                 `Black Desert Online,Arena Solare,Luta Competitiva,Batalha Épica,${player1},${player2},${player3},${player4},${player5},${player6},PvP,Estratégia,Combate,MMO,Jogo Online,Ação,Emoção,${class1PT},${class1EUA},${class2PT},${class2EUA},${class3PT},${class3EUA},${class4PT},${class4EUA},${class5PT},${class5EUA},${class6PT},${class6EUA},`
             )
-            $('#id_name').val(`${player1} ${player2} ${player3} Vs ${player4} ${player5} ${player6}`)
+            $('#id_name').val(`Ranked-${player1} ${player2} ${player3} Vs ${player4} ${player5} ${player6}`)
+            $('#id_type').val(0)
+            $('#templateModal').modal('hide')
+        }
+        function applySolarePracticeTemplate() {
+            const player1 = $('#player1').val()
+            const player2 = $('#player2').val()
+            const player3 = $('#player3').val()
+            const player4 = $('#player4').val()
+            const player5 = $('#player5').val()
+            const player6 = $('#player6').val()
+
+            const class1PT = $('#class1 option:selected').text().trim()
+            const class1EUA = $('#class1 option:selected').val().trim()
+
+            const class2PT = $('#class2 option:selected').text()
+            const class2EUA = $('#class2 option:selected').val()
+
+            const class3PT = $('#class3 option:selected').text()
+            const class3EUA = $('#class3 option:selected').val()
+
+            const class4PT = $('#class4 option:selected').text()
+            const class4EUA = $('#class4 option:selected').val()
+
+            const class5PT = $('#class5 option:selected').text()
+            const class5EUA = $('#class5 option:selected').val()
+
+            const class6PT = $('#class6 option:selected').text()
+            const class6EUA = $('#class6 option:selected').val()
+
+            const description1 = 'Sinta a adrenalina em uma luta de treinamento na Arena Solar de Black Desert Online! '
+            const description2 = `Testemunhe o embate eletrizante na Arena Solare, onde o Time composto por ${player1}(${class1PT}), ${player2}(${class2PT}) e ${player3}(${class3PT}), trava uma batalha épica contra o resiliente Time composto por ${player4}(${class4PT}), ${player5}(${class5PT}) e ${player6}(${class6PT}).`
+            const description3 = 'Mergulhe nas táticas, combos e movimentos refinados enquanto esses guerreiros se preparam para desafios ainda maiores.'
+            const description4 = `Upload realizado em: ${new Date().toLocaleString()}`
+            const description5 = 'Personalize a facetexture de seu jogo através do link: https://www.kawori.site/'
+            $('#id_title').val('Aprimorando Habilidades: Confronto na Arena Solar - Black Desert Online!')
+            $('#id_description').val(
+                `${description1}\n${description2}\n${description3}\n\n${description5}\n${description4}`
+            )
+            $('#id_keywords').val(
+                `Black Desert Online, Arena Solar, Treinamento, Luta de Treinamento,${player1},${player2},${player3},${player4},${player5},${player6},PvP,Estratégia,Combate,MMO,Jogo Online,Ação,Emoção,${class1PT},${class1EUA},${class2PT},${class2EUA},${class3PT},${class3EUA},${class4PT},${class4EUA},${class5PT},${class5EUA},${class6PT},${class6EUA},`
+            )
+            $('#id_name').val(`Treinamento-${player1} ${player2} ${player3} Vs ${player4} ${player5} ${player6}`)
+            $('#id_type').val(1)
+            $('#templateModal').modal('hide')
+        }
+        function applyBackupTemplate() {
+            const date = new Date().toLocaleString()
+            $('#id_title').val(`Backup realizado em ${date}`)
+            $('#id_description').val(`Backup realizado em ${date}`)
+            $('#id_keywords').val('storage,backup')
+            $('#id_name').val(`Backup realizado em ${date}`)
+            $('#id_type').val(2)
             $('#templateModal').modal('hide')
         }
     </script>

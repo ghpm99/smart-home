@@ -1,4 +1,5 @@
 from django import forms
+from video.models import Video
 
 
 class UploadFileForm(forms.Form):
@@ -15,6 +16,9 @@ class UploadFileForm(forms.Form):
         }
     ))
     keywords = forms.CharField(max_length=500, label='Tags Youtube', widget=forms.TextInput(
+        attrs={'class': "form-control"}
+    ))
+    type = forms.ChoiceField(choices=Video.TYPES, label='Tipo', widget=forms.Select(
         attrs={'class': "form-control"}
     ))
     file = forms.FileField(label='Arquivo', widget=forms.FileInput(

@@ -27,10 +27,11 @@ class Command(BaseCommand):
 
             try:
 
-                url_file_proccessed = f'{str(settings.BASE_DIR)}/output/{video.file_name}.mp4'
-                if os.path.isfile(url_file_proccessed):
-                    size_removed += os.path.getsize(url_file_proccessed)
-                    os.remove(url_file_proccessed)
+                if video.type is not Video.T_BACKUP:
+                    url_file_proccessed = f'{str(settings.BASE_DIR)}/output/{video.file_name}.mp4'
+                    if os.path.isfile(url_file_proccessed):
+                        size_removed += os.path.getsize(url_file_proccessed)
+                        os.remove(url_file_proccessed)
 
                 if video.video:
                     url_file_base = f'{str(settings.BASE_DIR)}{video.video.url}'
