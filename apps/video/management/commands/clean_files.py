@@ -34,7 +34,7 @@ class Command(BaseCommand):
 
                     if video.type is Video.T_BACKUP:
 
-                        dir = f'{str(settings.SHARED_FOLDER)}/Videos/Backup'
+                        dir = f'{str(settings.SHARED_FOLDER)}Videos/Backup'
                         target_file = f'{dir}/{video.video.name}.mp4'
 
                         Path(dir).mkdir(parents=True, exist_ok=True)
