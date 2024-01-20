@@ -39,7 +39,7 @@ class Command(BaseCommand):
             try:
                 print('Buscando arquivo de video')
                 clip = VideoFileClip(
-                    f'{str(settings.BASE_DIR)}{video.video.url}'
+                    f'{str(settings.MEDIA_ROOT)}{video.video.name}'
                 )
 
                 if video.type is Video.T_SOLARE_RANKED or video.type is Video.T_SOLARE_PRACTICE:

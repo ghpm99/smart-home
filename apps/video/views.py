@@ -86,6 +86,7 @@ def new_video(request):
                 type=type,
                 publish_at=last_date
             )
+
             video.save()
             return HttpResponseRedirect("/video/")
     else:
