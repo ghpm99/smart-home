@@ -1,4 +1,6 @@
 import os
+from pathlib import Path
+import shutil
 import time
 
 from django.conf import settings
@@ -27,9 +29,21 @@ class Command(BaseCommand):
 
             try:
 
-                if video.type is not Video.T_BACKUP:
-                    url_file_proccessed = f'{str(settings.BASE_DIR)}/output/{video.file_name}.mp4'
-                    if os.path.isfile(url_file_proccessed):
+                url_file_proccessed = f'{str(settings.BASE_DIR)}/output/{video.file_name}.mp4'
+                if os.path.isfile(url_file_proccessed):
+
+                    if video.type is Video.T_BACKUP:
+
+                        dir = f'{str(settings.SHARED_FOLDER)}/Imagens/Backup'
+                        target_file = f'{dir}/{video.video.name}.mp4'
+
+                        Path(dir).mkdir(parents=True, exist_ok=True)
+
+                        print(f'Movendo {url_file_proccessed} para {target_file}')
+                        shutil.move(url_file_proccessed, target_file)
+
+                    else:
+
                         size_removed += os.path.getsize(url_file_proccessed)
                         os.remove(url_file_proccessed)
 
