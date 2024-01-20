@@ -73,6 +73,11 @@ class Command(BaseCommand):
         files_to_backup = File.objects.filter(Q(last_backup__isnull=True) | Q(last_backup__lte=F('updated_at'))).all()
 
         print(f'Arquivos para backup: {files_to_backup.count()}')
+
+        if files_to_backup.count() == 0:
+            print('Nenhum arquivo para backup')
+            return
+
         print(f'Lista de arquivos pode ser encontrado em {settings.BACKUP_FOLDER}{meta_data}')
 
         with open(f'{settings.BACKUP_FOLDER}{meta_data}', 'a+', encoding='utf-8') as f:
