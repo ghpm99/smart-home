@@ -143,6 +143,7 @@ class Command(BaseCommand):
                     viewCount=0
                 )
             )
+            print(body)
             print('Criando request')
             insert_request = youtube.videos().insert(
                 part=",".join(body.keys()),
