@@ -125,7 +125,7 @@ class Command(BaseCommand):
             video_title = f"{video.title} #{video.id}"
 
             status_video = dict(
-                privacyStatus=privacy,
+                privacyStatus=privacy
             ),
 
             if video.type is Video.T_SOLARE_RANKED or video.type is Video.T_SOLARE_PRACTICE:
