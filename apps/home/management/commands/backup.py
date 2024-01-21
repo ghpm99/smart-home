@@ -73,12 +73,14 @@ class Command(BaseCommand):
                     print(f'Arquivo {file} criado')
                 else:
                     existing_file = existing_files[key]
+                    existing_file.size = os.path.getsize(f'{root}/{file}')
+                    existing_file.updated_at = datetime.fromtimestamp(os.path.getmtime(f'{root}/{file}'), tz=timezone.utc)
                     existing_file.last_interaction = backup_start
                     files_to_update.append(existing_file)
                     print(f'Arquivo {file} atualizado')
 
         File.objects.bulk_create(files_to_create)
-        File.objects.bulk_update(files_to_update, ['last_interaction'])
+        File.objects.bulk_update(files_to_update, ['size', 'updated_at', 'last_interaction'])
 
         files_to_backup = File.objects.filter(Q(last_backup__isnull=True) | Q(last_backup__lte=F('updated_at'))).all()
 
@@ -100,7 +102,8 @@ class Command(BaseCommand):
 
         for file_to_backup in files_to_backup:
             file_to_backup.last_backup = backup_start
-            file_to_backup.save()
+
+        File.objects.bulk_update(file_to_backup, ['last_backup'])
 
         print('Concluiu')
 
