@@ -47,29 +47,38 @@ class Command(BaseCommand):
         meta_data = f'bkp_{backup_start.strftime("%Y%m%d_%H%M%S")}.txt'
         Path(settings.BACKUP_FOLDER).mkdir(parents=True, exist_ok=True)
 
-        for root, dirs, files in os.walk(settings.SHARED_FOLDER):
+        existing_files = {(f.name, f.path): f for f in File.objects.all()}
+
+        files_to_create = []
+        files_to_update = []
+
+        for root, _, files in os.walk(settings.SHARED_FOLDER):
 
             if root.endswith('Backup'):
                 continue
 
             for file in files:
-                new_file, created = File.objects.get_or_create(
-                    name=file,
-                    path=root,
-                    defaults={
-                        'format': file.split('.')[-1],
-                        'size': os.path.getsize(f'{root}/{file}'),
-                        'updated_at': datetime.fromtimestamp(os.path.getmtime(f'{root}/{file}'), tz=timezone.utc),
-                        'created_at': datetime.fromtimestamp(os.path.getctime(f'{root}/{file}'), tz=timezone.utc),
-                        'last_interaction': backup_start,
-                    }
-                )
-                if created:
+                key = (file, root)
+                if key not in existing_files:
+                    new_file = File(
+                        name=file,
+                        path=root,
+                        format=file.split('.')[-1],
+                        size=os.path.getsize(f'{root}/{file}'),
+                        updated_at=datetime.fromtimestamp(os.path.getmtime(f'{root}/{file}'), tz=timezone.utc),
+                        created_at=datetime.fromtimestamp(os.path.getctime(f'{root}/{file}'), tz=timezone.utc),
+                        last_interaction=backup_start,
+                    )
+                    files_to_create.append(new_file)
                     print(f'Arquivo {file} criado')
                 else:
+                    existing_file = existing_files[key]
+                    existing_file.last_interaction = backup_start
+                    files_to_update.append(new_file)
                     print(f'Arquivo {file} atualizado')
-                    new_file.last_interaction = backup_start
-                    new_file.save()
+
+        File.objects.bulk_create(files_to_create)
+        File.objects.bulk_update(files_to_update, ['last_interaction'])
 
         files_to_backup = File.objects.filter(Q(last_backup__isnull=True) | Q(last_backup__lte=F('updated_at'))).all()
 
