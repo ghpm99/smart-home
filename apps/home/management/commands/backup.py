@@ -67,16 +67,13 @@ class Command(BaseCommand):
                 if created:
                     print(f'Arquivo {file} criado')
                 else:
+                    print(f'Arquivo {file} atualizado')
                     new_file.last_interaction = backup_start
                     new_file.save()
 
         files_to_backup = File.objects.filter(Q(last_backup__isnull=True) | Q(last_backup__lte=F('updated_at'))).all()
 
         print(f'Arquivos para backup: {files_to_backup.count()}')
-
-        if files_to_backup.count() == 0:
-            print('Nenhum arquivo para backup')
-            return
 
         print(f'Lista de arquivos pode ser encontrado em {settings.BACKUP_FOLDER}{meta_data}')
 
@@ -88,6 +85,8 @@ class Command(BaseCommand):
             f.close()
 
         file_names = [f'{file_to_backup.path}/{file_to_backup.name}' for file_to_backup in files_to_backup]
+        file_names.append(f'{settings.BACKUP_FOLDER}{meta_data}')
+        file_names.append(f'{settings.BASE_DIR}/db.sqlite3')
         compress(f'bkp_{backup_start.strftime("%Y%m%d_%H%M%S")}.zip', file_names)
 
         for file_to_backup in files_to_backup:
