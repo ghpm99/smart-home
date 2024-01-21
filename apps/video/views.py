@@ -54,7 +54,7 @@ def new_video(request):
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             req = request.POST
-            file = request.FILES["file"]
+            files = form.cleaned_data["file"]
             type = int(req.get('type') or 0)
             name = req.get('name')
             title = req.get('title'),
@@ -72,22 +72,23 @@ def new_video(request):
             else:
                 last_date = None
 
-            if type is Video.T_BACKUP:
-                name = f'Backup {file.name}'
-                title = file.name
+            for file in files:
+                if type is Video.T_BACKUP:
+                    name = f'Backup {file.name}'
+                    title = file.name
 
-            video = Video(
-                video=file,
-                name=name,
-                title=title,
-                description=req.get('description'),
-                keywords=req.get('keywords'),
-                file_base=file.name,
-                type=type,
-                publish_at=last_date
-            )
+                video = Video(
+                    video=file,
+                    name=name,
+                    title=title,
+                    description=req.get('description'),
+                    keywords=req.get('keywords'),
+                    file_base=file.name,
+                    type=type,
+                    publish_at=last_date
+                )
 
-            video.save()
+                video.save()
             return HttpResponseRedirect("/video/")
     else:
         form = UploadFileForm()
