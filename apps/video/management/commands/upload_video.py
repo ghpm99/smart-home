@@ -2,7 +2,7 @@
 import http.client
 import random
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import httplib2
 from django.conf import settings
@@ -12,6 +12,7 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
 from oauth2client.file import Storage
+import pytz
 from video.models import Video
 
 httplib2.RETRIES = 1
@@ -107,7 +108,7 @@ class Command(BaseCommand):
 
         video = Video.objects.filter(
             Q(status=Video.S_PROCESSING_SUCCESS) | Q(status=Video.S_FAIL)
-        ).first()
+        ).order_by('type').first()
 
         youtube = get_authenticated_service()
 
@@ -129,6 +130,20 @@ class Command(BaseCommand):
             )
 
             if video.type is Video.T_SOLARE_RANKED or video.type is Video.T_SOLARE_PRACTICE:
+
+                now = datetime.now(pytz.utc)
+                if video.publish_at < now:
+                    last_date = Video.objects.filter(
+                        Q(type=Video.T_SOLARE_RANKED) | Q(type=Video.T_SOLARE_PRACTICE)
+                    ).order_by('publish_at').last().publish_at
+
+                    if last_date < now:
+                        last_date = now.replace(hour=19, minute=0, second=0) + timedelta(days=2)
+                    else:
+                        last_date += timedelta(days=1)
+
+                    video.publish_at = last_date
+
                 status_video['publishAt'] = video.publish_at.strftime('%Y-%m-%dT%H:%M:%SZ')
 
             body = dict(
