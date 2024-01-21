@@ -107,6 +107,8 @@ class Command(BaseCommand):
 
         File.objects.bulk_update(files_to_update, ['last_backup'])
 
+        os.remove(f'{settings.BACKUP_FOLDER}{meta_data}')
+
         print('Concluiu')
 
     def handle(self, *args, **options):
