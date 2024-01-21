@@ -74,7 +74,7 @@ class Command(BaseCommand):
                 else:
                     existing_file = existing_files[key]
                     existing_file.last_interaction = backup_start
-                    files_to_update.append(new_file)
+                    files_to_update.append(existing_file)
                     print(f'Arquivo {file} atualizado')
 
         File.objects.bulk_create(files_to_create)
