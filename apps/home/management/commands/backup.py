@@ -100,10 +100,12 @@ class Command(BaseCommand):
         file_names.append(f'{settings.BASE_DIR}/db.sqlite3')
         compress(f'bkp_{backup_start.strftime("%Y%m%d_%H%M%S")}.zip', file_names)
 
+        files_to_update = []
         for file_to_backup in files_to_backup:
             file_to_backup.last_backup = backup_start
+            files_to_update.append(file_to_backup)
 
-        File.objects.bulk_update(file_to_backup, ['last_backup'])
+        File.objects.bulk_update(files_to_update, ['last_backup'])
 
         print('Concluiu')
 
