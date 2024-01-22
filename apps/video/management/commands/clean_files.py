@@ -36,7 +36,7 @@ class Command(BaseCommand):
 
                         dir = f'{str(settings.SHARED_FOLDER)}Videos/backup'
                         file_name_without_ext = video.file_base.rsplit('.', maxsplit=1)[0]
-                        target_file = f'{dir}/{file_name_without_ext}.mp4'
+                        target_file = f'{dir}/{video.id}_{file_name_without_ext}.mp4'
 
                         Path(dir).mkdir(parents=True, exist_ok=True)
 
