@@ -44,8 +44,12 @@ class Command(BaseCommand):
 
                     else:
 
+                        print(f'Removendo {url_file_proccessed}')
                         size_removed += os.path.getsize(url_file_proccessed)
                         os.remove(url_file_proccessed)
+
+                else:
+                    print(f'Arquivo {url_file_proccessed} não existe, video {video.id}')
 
                 if video.video:
                     url_file_base = f'{str(settings.MEDIA_ROOT)}{video.video.name}'
