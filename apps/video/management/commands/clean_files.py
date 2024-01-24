@@ -32,14 +32,13 @@ class Command(BaseCommand):
             if video.file_base is None:
                 video.file_base = video.video.name
 
-            print(f'Video {video.id} já processado, removendo arquivo base')
-
             try:
                 url_file_base = f'{str(settings.MEDIA_ROOT)}{video.video.name}'
 
                 if os.path.isfile(url_file_base):
                     size_removed += os.path.getsize(url_file_base)
                     os.remove(url_file_base)
+                    print(f'Arquivo {url_file_base} removido, video {video.id}')
 
                 video.video.delete(save=False)
                 files_to_update.append(video)
@@ -74,12 +73,11 @@ class Command(BaseCommand):
                         size_removed += os.path.getsize(url_file_proccessed)
                         os.remove(url_file_proccessed)
 
-                    video.status = Video.S_FINISHED
-                    files_to_update.append(video)
-
                 else:
                     print(f'Arquivo {url_file_proccessed} não existe, video {video.id}')
 
+                video.status = Video.S_FINISHED
+                files_to_update.append(video)
             except Exception as e:
                 print(e)
 
