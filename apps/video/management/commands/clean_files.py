@@ -6,6 +6,7 @@ import time
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from video.models import Video
+from django.db.models import Q
 
 
 class Command(BaseCommand):
@@ -17,23 +18,47 @@ class Command(BaseCommand):
         size_removed = 0
         print('Limpando arquivos')
 
-        videos = Video.objects.filter(
-            status=Video.S_SUCCESS,
-            youtube_id__isnull=False
-        ).all()
+        processed_videos = Video.objects.filter(
+            Q(status=Video.S_PROCESSING_SUCCESS) |
+            Q(status=Video.S_UPLOADING) |
+            Q(status=Video.S_SUCCESS) |
+            Q(status=Video.S_FAIL)
+        ).exclude(video='').all()
 
-        for video in videos:
+        print(processed_videos.query)
+
+        files_to_update = []
+
+        for video in processed_videos:
 
             if video.file_base is None:
                 video.file_base = video.video.name
 
-            try:
+            print(f'Video {video.id} já processado, removendo arquivo base')
 
+            try:
+                url_file_base = f'{str(settings.MEDIA_ROOT)}{video.video.name}'
+                if os.path.isfile(url_file_base):
+                    size_removed += os.path.getsize(url_file_base)
+                    os.remove(url_file_base)
+                video.video.delete()
+                files_to_update.append(video)
+            except Exception as e:
+                print(e)
+
+        Video.objects.bulk_update(files_to_update, ['video'])
+
+        videos = Video.objects.filter(
+            status=Video.S_SUCCESS,
+            youtube_id__isnull=False
+        ).exclude(status=Video.S_FINNISHED).all()
+
+        files_to_update = []
+        for video in videos:
+            try:
                 url_file_proccessed = f'{str(settings.BASE_DIR)}/output/{video.file_name}.mp4'
                 if os.path.isfile(url_file_proccessed):
-
                     if video.type is Video.T_BACKUP:
-
                         dir = f'{str(settings.SHARED_FOLDER)}Videos/backup'
                         file_name_without_ext = video.file_base.rsplit('.', maxsplit=1)[0]
                         target_file = f'{dir}/{video.id}_{file_name_without_ext}.mp4'
@@ -44,25 +69,20 @@ class Command(BaseCommand):
                         shutil.move(url_file_proccessed, target_file)
 
                     else:
-
                         print(f'Removendo {url_file_proccessed}')
                         size_removed += os.path.getsize(url_file_proccessed)
                         os.remove(url_file_proccessed)
 
+                    video.status = Video.S_FINNISHED
+                    files_to_update.append(video)
+
                 else:
                     print(f'Arquivo {url_file_proccessed} não existe, video {video.id}')
 
-                if video.video:
-                    url_file_base = f'{str(settings.MEDIA_ROOT)}{video.video.name}'
-                    if os.path.isfile(url_file_base):
-                        size_removed += os.path.getsize(url_file_base)
-                        os.remove(url_file_base)
-                    video.video.delete()
-
-                video.save()
-
             except Exception as e:
                 print(e)
+
+        Video.objects.bulk_update(files_to_update, ['status'])
 
         print(f'Total de espaço liberado: {size_removed} bytes')
 

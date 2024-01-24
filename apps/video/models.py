@@ -10,6 +10,7 @@ class Video(models.Model):
     S_UPLOADING = 4
     S_SUCCESS = 6
     S_FAIL = 7
+    S_FINISHED = 8
 
     STATUS = [
         (S_PENDING, "Pendente"),
@@ -19,6 +20,7 @@ class Video(models.Model):
         (S_UPLOADING, "Enviando"),
         (S_SUCCESS, "Sucesso"),
         (S_FAIL, "Falhou"),
+        (S_FINISHED, "Finalizado")
     ]
 
     T_SOLARE_RANKED = 0
