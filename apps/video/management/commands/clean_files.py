@@ -74,7 +74,7 @@ class Command(BaseCommand):
                         size_removed += os.path.getsize(url_file_proccessed)
                         os.remove(url_file_proccessed)
 
-                    video.status = Video.S_FINNISHED
+                    video.status = Video.S_FINISHED
                     files_to_update.append(video)
 
                 else:
