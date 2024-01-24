@@ -25,8 +25,6 @@ class Command(BaseCommand):
             Q(status=Video.S_FAIL)
         ).exclude(video='').all()
 
-        print(processed_videos.query)
-
         files_to_update = []
 
         for video in processed_videos:
@@ -38,11 +36,14 @@ class Command(BaseCommand):
 
             try:
                 url_file_base = f'{str(settings.MEDIA_ROOT)}{video.video.name}'
+
                 if os.path.isfile(url_file_base):
                     size_removed += os.path.getsize(url_file_base)
                     os.remove(url_file_base)
-                video.video.delete()
+
+                video.video.delete(save=False)
                 files_to_update.append(video)
+
             except Exception as e:
                 print(e)
 
@@ -51,7 +52,7 @@ class Command(BaseCommand):
         videos = Video.objects.filter(
             status=Video.S_SUCCESS,
             youtube_id__isnull=False
-        ).exclude(status=Video.S_FINNISHED).all()
+        ).exclude(status=Video.S_FINISHED).all()
 
         files_to_update = []
         for video in videos:
