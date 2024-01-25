@@ -80,13 +80,13 @@
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Personagem 1:</div>
                                             <div class="col-sm-8">
-                                                <input id="player1" class="form-control" value="DragaoVermelho" />
+                                                <input id="ranked-player1" class="form-control" value="DragaoVermelho" />
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Classe:</div>
                                             <div class="col-sm-8">
-                                                <select id="class1" class="form-select">
+                                                <select id="ranked-class1" class="form-select">
                                                     {% for class_option in class_options %}
                                                         <option {% if class_option.value == "Witch" %}selected{% endif %}
                                                                 value="{{ class_option.value }}">
@@ -101,13 +101,13 @@
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Personagem 2:</div>
                                             <div class="col-sm-8">
-                                                <input id="player2" class="form-control" />
+                                                <input id="ranked-player2" class="form-control" />
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Classe:</div>
                                             <div class="col-sm-8">
-                                                <select id="class2" class="form-select">
+                                                <select id="ranked-class2" class="form-select">
                                                     {% for class_option in class_options %}
                                                         <option value="{{ class_option.value }}">{{ class_option.label }}</option>
                                                     {% endfor %}
@@ -119,13 +119,13 @@
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Personagem 3:</div>
                                             <div class="col-sm-8">
-                                                <input id="player3" class="form-control" />
+                                                <input id="ranked-player3" class="form-control" />
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Classe:</div>
                                             <div class="col-sm-8">
-                                                <select id="class3" class="form-select">
+                                                <select id="ranked-class3" class="form-select">
                                                     {% for class_option in class_options %}
                                                         <option value="{{ class_option.value }}">{{ class_option.label }}</option>
                                                     {% endfor %}
@@ -140,13 +140,13 @@
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Personagem 1:</div>
                                             <div class="col-sm-8">
-                                                <input id="player4" class="form-control" />
+                                                <input id="ranked-player4" class="form-control" />
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Classe:</div>
                                             <div class="col-sm-8">
-                                                <select id="class4" class="form-select">
+                                                <select id="ranked-class4" class="form-select">
                                                     {% for class_option in class_options %}
                                                         <option value="{{ class_option.value }}">{{ class_option.label }}</option>
                                                     {% endfor %}
@@ -158,13 +158,13 @@
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Personagem 2:</div>
                                             <div class="col-sm-8">
-                                                <input id="player5" class="form-control" />
+                                                <input id="ranked-player5" class="form-control" />
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Classe:</div>
                                             <div class="col-sm-8">
-                                                <select id="class5" class="form-select">
+                                                <select id="ranked-class5" class="form-select">
                                                     {% for class_option in class_options %}
                                                         <option value="{{ class_option.value }}">{{ class_option.label }}</option>
                                                     {% endfor %}
@@ -176,13 +176,13 @@
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Personagem 3:</div>
                                             <div class="col-sm-8">
-                                                <input id="player6" class="form-control" />
+                                                <input id="ranked-player6" class="form-control" />
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Classe:</div>
                                             <div class="col-sm-8">
-                                                <select id="class6" class="form-select">
+                                                <select id="ranked-class6" class="form-select">
                                                     {% for class_option in class_options %}
                                                         <option value="{{ class_option.value }}">{{ class_option.label }}</option>
                                                     {% endfor %}
@@ -203,13 +203,13 @@
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Personagem 1:</div>
                                             <div class="col-sm-8">
-                                                <input id="player1" class="form-control" value="DragaoVermelho" />
+                                                <input id="practice-player1" class="form-control" value="DragaoVermelho" />
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Classe:</div>
                                             <div class="col-sm-8">
-                                                <select id="class1" class="form-select">
+                                                <select id="practice-class1" class="form-select">
                                                     {% for class_option in class_options %}
                                                         <option {% if class_option.value == "Witch" %}selected{% endif %}
                                                                 value="{{ class_option.value }}">
@@ -224,13 +224,13 @@
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Personagem 2:</div>
                                             <div class="col-sm-8">
-                                                <input id="player2" class="form-control" />
+                                                <input id="practice-player2" class="form-control" />
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Classe:</div>
                                             <div class="col-sm-8">
-                                                <select id="class2" class="form-select">
+                                                <select id="practice-class2" class="form-select">
                                                     {% for class_option in class_options %}
                                                         <option value="{{ class_option.value }}">{{ class_option.label }}</option>
                                                     {% endfor %}
@@ -242,13 +242,13 @@
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Personagem 3:</div>
                                             <div class="col-sm-8">
-                                                <input id="player3" class="form-control" />
+                                                <input id="practice-player3" class="form-control" />
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Classe:</div>
                                             <div class="col-sm-8">
-                                                <select id="class3" class="form-select">
+                                                <select id="practice-class3" class="form-select">
                                                     {% for class_option in class_options %}
                                                         <option value="{{ class_option.value }}">{{ class_option.label }}</option>
                                                     {% endfor %}
@@ -263,13 +263,13 @@
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Personagem 1:</div>
                                             <div class="col-sm-8">
-                                                <input id="player4" class="form-control" />
+                                                <input id="practice-player4" class="form-control" />
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Classe:</div>
                                             <div class="col-sm-8">
-                                                <select id="class4" class="form-select">
+                                                <select id="practice-class4" class="form-select">
                                                     {% for class_option in class_options %}
                                                         <option value="{{ class_option.value }}">{{ class_option.label }}</option>
                                                     {% endfor %}
@@ -281,13 +281,13 @@
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Personagem 2:</div>
                                             <div class="col-sm-8">
-                                                <input id="player5" class="form-control" />
+                                                <input id="practice-player5" class="form-control" />
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Classe:</div>
                                             <div class="col-sm-8">
-                                                <select id="class5" class="form-select">
+                                                <select id="practice-class5" class="form-select">
                                                     {% for class_option in class_options %}
                                                         <option value="{{ class_option.value }}">{{ class_option.label }}</option>
                                                     {% endfor %}
@@ -299,13 +299,13 @@
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Personagem 3:</div>
                                             <div class="col-sm-8">
-                                                <input id="player6" class="form-control" />
+                                                <input id="practice-player6" class="form-control" />
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-4 col-form-label">Classe:</div>
                                             <div class="col-sm-8">
-                                                <select id="class6" class="form-select">
+                                                <select id="practice-class6" class="form-select">
                                                     {% for class_option in class_options %}
                                                         <option value="{{ class_option.value }}">{{ class_option.label }}</option>
                                                     {% endfor %}
@@ -345,30 +345,30 @@
     </script>
     <script type="text/javascript">
         function applySolareRankedTemplate() {
-            const player1 = $('#player1').val()
-            const player2 = $('#player2').val()
-            const player3 = $('#player3').val()
-            const player4 = $('#player4').val()
-            const player5 = $('#player5').val()
-            const player6 = $('#player6').val()
+            const player1 = $('#ranked-player1').val()
+            const player2 = $('#ranked-player2').val()
+            const player3 = $('#ranked-player3').val()
+            const player4 = $('#ranked-player4').val()
+            const player5 = $('#ranked-player5').val()
+            const player6 = $('#ranked-player6').val()
 
-            const class1PT = $('#class1 option:selected').text().trim()
-            const class1EUA = $('#class1 option:selected').val().trim()
+            const class1PT = $('#ranked-class1 option:selected').text().trim()
+            const class1EUA = $('#ranked-class1 option:selected').val().trim()
 
-            const class2PT = $('#class2 option:selected').text()
-            const class2EUA = $('#class2 option:selected').val()
+            const class2PT = $('#ranked-class2 option:selected').text()
+            const class2EUA = $('#ranked-class2 option:selected').val()
 
-            const class3PT = $('#class3 option:selected').text()
-            const class3EUA = $('#class3 option:selected').val()
+            const class3PT = $('#ranked-class3 option:selected').text()
+            const class3EUA = $('#ranked-class3 option:selected').val()
 
-            const class4PT = $('#class4 option:selected').text()
-            const class4EUA = $('#class4 option:selected').val()
+            const class4PT = $('#ranked-class4 option:selected').text()
+            const class4EUA = $('#ranked-class4 option:selected').val()
 
-            const class5PT = $('#class5 option:selected').text()
-            const class5EUA = $('#class5 option:selected').val()
+            const class5PT = $('#ranked-class5 option:selected').text()
+            const class5EUA = $('#ranked-class5 option:selected').val()
 
-            const class6PT = $('#class6 option:selected').text()
-            const class6EUA = $('#class6 option:selected').val()
+            const class6PT = $('#ranked-class6 option:selected').text()
+            const class6EUA = $('#ranked-class6 option:selected').val()
 
             const description1 = 'Adentre o mundo virtual do Black Desert Online e mergulhe de cabeça em uma batalha competitiva como nenhuma outra!'
             const description2 = `Testemunhe o embate eletrizante na Arena Solare, onde o Time composto por ${player1}(${class1PT}), ${player2}(${class2PT}) e ${player3}(${class3PT}), trava uma batalha épica contra o resiliente Time composto por ${player4}(${class4PT}), ${player5}(${class5PT}) e ${player6}(${class6PT}).`
@@ -387,30 +387,30 @@
             $('#templateModal').modal('hide')
         }
         function applySolarePracticeTemplate() {
-            const player1 = $('#player1').val()
-            const player2 = $('#player2').val()
-            const player3 = $('#player3').val()
-            const player4 = $('#player4').val()
-            const player5 = $('#player5').val()
-            const player6 = $('#player6').val()
+            const player1 = $('#practice-player1').val()
+            const player2 = $('#practice-player2').val()
+            const player3 = $('#practice-player3').val()
+            const player4 = $('#practice-player4').val()
+            const player5 = $('#practice-player5').val()
+            const player6 = $('#practice-player6').val()
 
-            const class1PT = $('#class1 option:selected').text().trim()
-            const class1EUA = $('#class1 option:selected').val().trim()
+            const class1PT = $('#practice-class1 option:selected').text().trim()
+            const class1EUA = $('#practice-class1 option:selected').val().trim()
 
-            const class2PT = $('#class2 option:selected').text()
-            const class2EUA = $('#class2 option:selected').val()
+            const class2PT = $('#practice-class2 option:selected').text()
+            const class2EUA = $('#practice-class2 option:selected').val()
 
-            const class3PT = $('#class3 option:selected').text()
-            const class3EUA = $('#class3 option:selected').val()
+            const class3PT = $('#practice-class3 option:selected').text()
+            const class3EUA = $('#practice-class3 option:selected').val()
 
-            const class4PT = $('#class4 option:selected').text()
-            const class4EUA = $('#class4 option:selected').val()
+            const class4PT = $('#practice-class4 option:selected').text()
+            const class4EUA = $('#practice-class4 option:selected').val()
 
-            const class5PT = $('#class5 option:selected').text()
-            const class5EUA = $('#class5 option:selected').val()
+            const class5PT = $('#practice-class5 option:selected').text()
+            const class5EUA = $('#practice-class5 option:selected').val()
 
-            const class6PT = $('#class6 option:selected').text()
-            const class6EUA = $('#class6 option:selected').val()
+            const class6PT = $('#practice-class6 option:selected').text()
+            const class6EUA = $('#practice-class6 option:selected').val()
 
             const description1 = 'Sinta a adrenalina em uma luta de treinamento na Arena Solar de Black Desert Online! '
             const description2 = `Testemunhe o embate eletrizante na Arena Solare, onde o Time composto por ${player1}(${class1PT}), ${player2}(${class2PT}) e ${player3}(${class3PT}), trava uma batalha épica contra o resiliente Time composto por ${player4}(${class4PT}), ${player5}(${class5PT}) e ${player6}(${class6PT}).`
