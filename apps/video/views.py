@@ -22,6 +22,7 @@ def video(request):
     page_number = request.GET.get('page', 1)
 
     page_obj = paginator.get_page(page_number)
+    page_obj.adjusted_elided_pages = paginator.get_elided_page_range(page_obj.number, on_each_side=2, on_ends=1)
 
     status = dict(Video.STATUS)
 
