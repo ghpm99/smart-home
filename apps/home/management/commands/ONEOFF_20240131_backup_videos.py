@@ -22,7 +22,7 @@ class Command(BaseCommand):
             | Q(status=Video.S_SUCCESS)
             | Q(status=Video.S_FAIL)
             | Q(type=Video.T_BACKUP)
-            | Q(id__gte=800)
+            & Q(id__gte=800)
         ).all()
 
         files_to_update = []
