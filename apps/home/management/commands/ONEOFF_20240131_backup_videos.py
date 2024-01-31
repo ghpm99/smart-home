@@ -16,13 +16,12 @@ class Command(BaseCommand):
 
     def run_command(self):
 
-        processed_videos = Video.objects.filter(
+        processed_videos = Video.objects.filter(id__gte=800).filter(
             Q(status=Video.S_PROCESSING_SUCCESS)
             | Q(status=Video.S_UPLOADING)
             | Q(status=Video.S_SUCCESS)
             | Q(status=Video.S_FAIL)
             | Q(type=Video.T_BACKUP)
-            & Q(id__gte=800)
         ).all()
 
         files_to_update = []
