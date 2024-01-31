@@ -40,13 +40,24 @@ class Command(BaseCommand):
                     os.remove(url_file_base)
                     print(f'Arquivo {url_file_base} removido, video {video.id}')
 
+                if video.type is Video.T_BACKUP:
+                    url_file_proccessed = f'{str(settings.BASE_DIR)}/output/{video.file_name}.mp4'
+                    dir = f'{str(settings.SHARED_FOLDER)}Videos/backup'
+                    file_name_without_ext = video.file_base.rsplit('.', maxsplit=1)[0]
+                    target_file = f'{dir}/{video.id}_{file_name_without_ext}.mp4'
+
+                    Path(dir).mkdir(parents=True, exist_ok=True)
+
+                    print(f'Movendo {url_file_proccessed} para {target_file}')
+                    shutil.copy(url_file_proccessed, target_file)
+
                 video.video.delete(save=False)
                 files_to_update.append(video)
 
             except Exception as e:
                 print(e)
 
-        Video.objects.bulk_update(files_to_update, ['video'])
+        Video.objects.bulk_update(files_to_update, ['video', 'file_base'])
 
         videos = Video.objects.filter(
             status=Video.S_SUCCESS,
@@ -58,20 +69,9 @@ class Command(BaseCommand):
             try:
                 url_file_proccessed = f'{str(settings.BASE_DIR)}/output/{video.file_name}.mp4'
                 if os.path.isfile(url_file_proccessed):
-                    if video.type is Video.T_BACKUP:
-                        dir = f'{str(settings.SHARED_FOLDER)}Videos/backup'
-                        file_name_without_ext = video.file_base.rsplit('.', maxsplit=1)[0]
-                        target_file = f'{dir}/{video.id}_{file_name_without_ext}.mp4'
-
-                        Path(dir).mkdir(parents=True, exist_ok=True)
-
-                        print(f'Movendo {url_file_proccessed} para {target_file}')
-                        shutil.move(url_file_proccessed, target_file)
-
-                    else:
-                        print(f'Removendo {url_file_proccessed}')
-                        size_removed += os.path.getsize(url_file_proccessed)
-                        os.remove(url_file_proccessed)
+                    print(f'Removendo {url_file_proccessed}')
+                    size_removed += os.path.getsize(url_file_proccessed)
+                    os.remove(url_file_proccessed)
 
                 else:
                     print(f'Arquivo {url_file_proccessed} não existe, video {video.id}')

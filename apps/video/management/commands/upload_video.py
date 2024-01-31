@@ -1,10 +1,12 @@
 
 import http.client
+import os
 import random
 import time
 from datetime import datetime, timedelta
 
 import httplib2
+import pytz
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db.models import Q
@@ -12,7 +14,6 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
 from oauth2client.file import Storage
-import pytz
 from video.models import Video
 
 httplib2.RETRIES = 1
@@ -160,11 +161,13 @@ class Command(BaseCommand):
             )
             print(body)
             print('Criando request')
+            url_file_proccessed = f'{str(settings.BASE_DIR)}/output/{video.file_name}.mp4'
+
             insert_request = youtube.videos().insert(
                 part=",".join(body.keys()),
                 body=body,
                 media_body=MediaFileUpload(
-                    f"{str(settings.BASE_DIR)}/output/{video.file_name}.mp4",
+                    url_file_proccessed,
                     chunksize=-1,
                     resumable=True
                 )
@@ -175,6 +178,10 @@ class Command(BaseCommand):
             print('Envio finalizado')
 
             video.status = Video.S_SUCCESS
+
+            if os.path.isfile(url_file_proccessed):
+                print(f'Removendo {url_file_proccessed}')
+                os.remove(url_file_proccessed)
 
         except Exception as e:
             print('Falhou no envio')

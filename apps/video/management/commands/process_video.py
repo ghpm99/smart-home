@@ -1,3 +1,6 @@
+import os
+from pathlib import Path
+import shutil
 import time
 import uuid
 
@@ -38,9 +41,8 @@ class Command(BaseCommand):
 
             try:
                 print('Buscando arquivo de video')
-                clip = VideoFileClip(
-                    f'{str(settings.MEDIA_ROOT)}{video.video.name}'
-                )
+                url_file_base = f'{str(settings.MEDIA_ROOT)}{video.video.name}'
+                clip = VideoFileClip(url_file_base)
 
                 if video.type is Video.T_SOLARE_RANKED or video.type is Video.T_SOLARE_PRACTICE:
                     print('Buscando gif de overlay')
@@ -67,6 +69,22 @@ class Command(BaseCommand):
 
                 print('Processo concluido')
                 video.status = Video.S_PROCESSING_SUCCESS
+
+                if video.type is Video.T_BACKUP:
+                    dir = f'{str(settings.SHARED_FOLDER)}Videos/backup'
+                    file_name_without_ext = video.file_base.rsplit('.', maxsplit=1)[0]
+                    target_file = f'{dir}/{video.id}_{file_name_without_ext}.mp4'
+
+                    Path(dir).mkdir(parents=True, exist_ok=True)
+
+                    print(f'Copiando {output_file_name} para {target_file}')
+                    shutil.copy(output_file_name, target_file)
+
+                if os.path.isfile(url_file_base):
+                    os.remove(url_file_base)
+                    print(f'Arquivo {url_file_base} removido, video {video.id}')
+
+                video.video.delete(save=False)
 
             except Exception as e:
                 print('Processo falhou')
