@@ -16,7 +16,7 @@ class Command(BaseCommand):
 
     def run_command(self):
 
-        processed_videos = Video.objects.filter(id__gte=800).filter(
+        processed_videos = Video.objects.filter(id=876).filter(
             Q(status=Video.S_PROCESSING_SUCCESS)
             | Q(status=Video.S_UPLOADING)
             | Q(status=Video.S_SUCCESS)
