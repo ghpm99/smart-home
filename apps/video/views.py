@@ -60,7 +60,7 @@ def new_video(request):
             files = form.cleaned_data["file"]
             type = int(req.get("type") or 0)
             name = req.get("name")
-            title = (req.get("title"),)
+            title = req.get("title")
 
             if type is Video.T_SOLARE_RANKED or type is Video.T_SOLARE_PRACTICE:
                 last_date = (
