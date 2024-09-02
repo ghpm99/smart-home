@@ -21,4 +21,6 @@ def home(request):
             'usage': psutil.disk_usage(disk.device)
         } for disk in psutil.disk_partitions()]
     }
+    cpu_free = 100 - ctx['cpu_percent']
+    ctx['cpu_free'] = cpu_free
     return render(request, 'home/home.html', ctx)

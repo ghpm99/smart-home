@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <div class="card m-3">
         <div class="card-header">
             <div>Informações Gerais:</div>
@@ -12,6 +13,12 @@
             <div>Memoria Usada: {{ virtual_memory.used }}</div>
             <div>Memoria Livre: {{ virtual_memory.free }}</div>
             <div>Memoria Percentual: {{ virtual_memory.percent }}</div>
+            <div class="chart">
+                <canvas id="memory"></canvas>
+            </div>
+            <div class="chart">
+                <canvas id="cpu"></canvas>
+            </div>
         </div>
     </div>
     <div class="d-flex justify-content-between flex-wrap">
@@ -31,4 +38,41 @@
             </div>
         {% endfor %}
     </div>
+    <script>
+        const memoryCtx = document.getElementById('memory');
+        const cpuCtx = document.getElementById('cpu');
+
+        console.log( [{{cpu_free}}, {{ cpu_percent }}])
+
+        const memoryData = {
+            datasets: [{
+                data: [{{ virtual_memory.free }}, {{ virtual_memory.used }}],
+                backgroundColor: [
+                    'rgb(150, 235, 150)',
+                    'rgb(255, 062, 035)',
+                ],
+                hoverOffset: 4
+            }]
+        };
+        const cpuData = {
+            datasets: [{
+                data: [{{cpu_free}}, {{ cpu_percent }}],
+                backgroundColor: [
+                    'rgb(150, 235, 150)',
+                    'rgb(255, 062, 035)',
+                ],
+                hoverOffset: 4
+            }]
+        };
+
+        new Chart(memoryCtx, {
+            type: 'doughnut',
+            data: memoryData
+        });
+        new Chart(cpuCtx, {
+            type: 'doughnut',
+            data: cpuData
+        });
+
+    </script>
 {% endblock content %}

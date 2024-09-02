@@ -5,7 +5,7 @@
 		"**/requirements{/**,*}.{txt,in}": "pip-requirements"
 	},
 	"[django-html]": {
-		"editor.defaultFormatter": "monosans.djlint"
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"cSpell.enabled": true,
 	"python.analysis.autoImportCompletions": true,
