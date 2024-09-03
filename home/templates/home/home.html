@@ -5,18 +5,20 @@
         <div class="card-header">
             <div>Informações Gerais:</div>
         </div>
-        <div class="card-body">
-            <div>Hostname: {{ computer_name }}</div>
-            <div>Uso de CPU: {{ cpu_percent }}</div>
-            <div>Memoria Total: {{ virtual_memory.total }}</div>
-            <div>Memoria Disponivel: {{ virtual_memory.available }}</div>
-            <div>Memoria Usada: {{ virtual_memory.used }}</div>
-            <div>Memoria Livre: {{ virtual_memory.free }}</div>
-            <div>Memoria Percentual: {{ virtual_memory.percent }}</div>
-            <div class="chart">
+        <div class="card-body d-flex">
+            <div class="p-2">
+                <div>Hostname: {{ computer_name }}</div>
+                <div>Uso de CPU: {{ cpu_percent }}</div>
+                <div>Memoria Total: {{ virtual_memory.total }}</div>
+                <div>Memoria Disponivel: {{ virtual_memory.available }}</div>
+                <div>Memoria Usada: {{ virtual_memory.used }}</div>
+                <div>Memoria Livre: {{ virtual_memory.free }}</div>
+                <div>Memoria Percentual: {{ virtual_memory.percent }}</div>
+            </div>
+            <div class="chart p-2">
                 <canvas id="memory"></canvas>
             </div>
-            <div class="chart">
+            <div class="chart p-2">
                 <canvas id="cpu"></canvas>
             </div>
         </div>
@@ -42,8 +44,6 @@
         const memoryCtx = document.getElementById('memory');
         const cpuCtx = document.getElementById('cpu');
 
-        console.log( [{{cpu_free}}, {{ cpu_percent }}])
-
         const memoryData = {
             datasets: [{
                 data: [{{ virtual_memory.free }}, {{ virtual_memory.used }}],
@@ -67,12 +67,36 @@
 
         new Chart(memoryCtx, {
             type: 'doughnut',
-            data: memoryData
-        });
-        new Chart(cpuCtx, {
-            type: 'doughnut',
-            data: cpuData
+            data: memoryData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Memoria'
+                    }
+                }
+            },
         });
 
+        new Chart(cpuCtx, {
+            type: 'doughnut',
+            data: cpuData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Cpu'
+                    }
+                }
+            },
+        });
     </script>
 {% endblock content %}
