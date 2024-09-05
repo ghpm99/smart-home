@@ -16,6 +16,7 @@
         <link href="{% static 'css/base.css' %}" rel="stylesheet">
         <script src="{% static 'vendor/jquery-3.7.0.min.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/menu.js' %}"></script>
         <script
             type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"
@@ -50,16 +51,20 @@
                         <li class="nav-item dropdown">
                             <a
                                 class="nav-link dropdown-toggle"
-                                href="#"
                                 role="button"
                                 id="navbarDropdown"
                                 data-toggle="dropdown"
                                 aria-haspopup="true"
                                 aria-expanded="false"
+                                onclick=handleOnClickDropdown()
                             >
                                 Bibliotecas
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <div
+                                class="dropdown-menu"
+                                aria-labelledby="navbarDropdown"
+                                id="dropdown-menu"
+                            >
                                 <a class="dropdown-item" href="{% url 'home' %}">Arquivos</a>
                                 <a class="dropdown-item" href="{% url 'home' %}">Documentos</a>
                                 <a class="dropdown-item" href="{% url 'home' %}">Imagens</a>
