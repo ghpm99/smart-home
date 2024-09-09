@@ -3,9 +3,13 @@ import psutil
 
 from django.shortcuts import render
 
+from home.models import Disk
+
 
 # Create your views here.
 def home(request):
+
+    disk_list = Disk.objects.all()
 
     ctx = {
         'computer_name': platform.node(),
@@ -14,12 +18,12 @@ def home(request):
         'cpu_status': psutil.cpu_stats(),
         'virtual_memory': psutil.virtual_memory(),
         'disk_partitions': [{
-            'device': disk.device,
+            'device': disk.name,
             'mountpoint': disk.mountpoint,
             'fstype': disk.fstype,
             'opts': disk.opts,
-            'usage': psutil.disk_usage(disk.device)
-        } for disk in psutil.disk_partitions()]
+            'usage': psutil.disk_usage(disk.name)
+        } for disk in disk_list]
     }
     cpu_free = 100 - ctx['cpu_percent']
     ctx['cpu_free'] = cpu_free

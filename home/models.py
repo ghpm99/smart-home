@@ -11,3 +11,10 @@ class File(models.Model):
     created_at = models.DateTimeField()
     last_interaction = models.DateTimeField(auto_now=True)
     last_backup = models.DateTimeField(null=True)
+
+
+class Disk(models.Model):
+    name = models.CharField(max_length=512)
+    mountpoint = models.CharField(max_length=256)
+    fstype = models.CharField(max_length=16)
+    opts = models.CharField(max_length=512)
