@@ -27,9 +27,8 @@
         {% endblock head_bottom %}
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="{% url 'home' %}">{{ computer_name }}</a>
+        <nav class="navbar navbar-expand-lg pinning-header">
+            <div class="container-fluid pinning-header-container">
                 <button class="navbar-toggler"
                         type="button"
                         data-toggle="collapse"
@@ -39,15 +38,16 @@
                         aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
+                <div class="collapse navbar-collapse main-header" id="navbarSupportedContent">
+                    <a class="navbar-brand logo" href="{% url 'home' %}">{{ computer_name }}</a>
+                    <ul class="navbar-nav tabbed-primary-navigation">
+                        <li class="nav-item navigation-tab active">
                             <a class="nav-link" href="{% url 'home' %}">Inicio</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item navigation-tab">
                             <a class="nav-link" href="{% url 'video' %}">Video</a>
                         </li>
-                        <li class="nav-item dropdown">
+                        <li class="nav-item navigation-tab dropdown">
                             <a
                                 class="nav-link dropdown-toggle"
                                 role="button"
@@ -71,6 +71,15 @@
                             </div>
                         </li>
                     </ul>
+                    <div class="secondary-navigation">
+                        <div class="nav-element">
+                            <div class="searchBox">
+                                <button class="searchTab">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" role="img" viewBox="0 0 24 24" width="24" height="24" data-icon="MagnifyingGlassStandard" aria-hidden="true" class="search-icon"><path fill-rule="evenodd" clip-rule="evenodd" d="M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10ZM15.6177 17.0319C14.078 18.2635 12.125 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1C14.9706 1 19 5.02944 19 10C19 12.125 18.2635 14.078 17.0319 15.6177L22.7071 21.2929L21.2929 22.7071L15.6177 17.0319Z" fill="currentColor"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -80,10 +89,8 @@
                 dropdownMenuElement.toggleClass('show')
             }
         </script>
-        <div id="content-body">
-            {% block content %}
-            {% endblock content %}
-        </div>
+        {% block content %}
+        {% endblock content %}
     </body>
     {% block body_bottom %}
     {% endblock body_bottom %}

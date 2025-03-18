@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="controllers">
+        <div class="card my-2">
+            <div class="card-body">
+                <form action="{% url 'new-apontamento-hora' %}"
+                      method="post"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ form.name.errors }}
+                        <label class="form-label" for="{{ form.name.id_for_label }}">Nome:</label>
+                        {{ form.name }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form.observation.errors }}
+                        <label class="form-label" for="{{ form.observation.id_for_label }}">Observação:</label>
+                        {{ form.observation }}
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <input class="btn btn-primary" type="submit" value="Lançar" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

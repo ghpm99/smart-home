@@ -10,5 +10,7 @@ urlpatterns = [
         path('documents', view=views.documents, name='media-documents'),
         path('images', view=views.images, name='media-images'),
         path('video', view=views.video, name='media-video')
-    ]))
+    ])),
+    path('apontamento-hora/', view=views.apontamento, name='apontamento-hora'),
+    path('new-apontamento-hora/', view=views.new_apontamento, name='new-apontamento-hora'),
 ]

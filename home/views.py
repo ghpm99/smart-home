@@ -1,33 +1,32 @@
+from datetime import datetime
 import platform
+from django.http import HttpResponseRedirect
 import psutil
 
 from django.shortcuts import render
 from django.core.paginator import Paginator
+import pytz
 
-from home.models import Disk, File
+from home.forms import ApontamentoForm
+from home.models import Apontamento, Disk, File
 
 
 # Create your views here.
 def home(request):
 
-    disk_list = Disk.objects.all()
+    video_list = File.objects.filter(format__in=['mp4', 'avi']).order_by('path')[0:5]
 
     ctx = {
         'computer_name': platform.node(),
-        'cpu_times': psutil.cpu_times(),
-        'cpu_percent': psutil.cpu_percent(),
-        'cpu_status': psutil.cpu_stats(),
-        'virtual_memory': psutil.virtual_memory(),
-        'disk_partitions': [{
-            'device': disk.name,
-            'mountpoint': disk.mountpoint,
-            'fstype': disk.fstype,
-            'opts': disk.opts,
-            'usage': psutil.disk_usage(disk.name)
-        } for disk in disk_list]
+        'total_video_files': video_list.count(),
+        'video_list': [{
+            'name': video.name,
+            'path': f"{video.path}/{video.name}",
+            'size': video.size,
+            'updated_at': video.updated_at,
+            'created_at': video.created_at
+        } for video in video_list]
     }
-    cpu_free = 100 - ctx['cpu_percent']
-    ctx['cpu_free'] = cpu_free
     return render(request, 'home/home.html', ctx)
 
 
@@ -101,3 +100,64 @@ def video(request):
     }
 
     return render(request, 'media/video.html', ctx)
+
+
+def apontamento(request):
+    req = request.GET
+
+    apontamento_list = Apontamento.objects.all().order_by("-id")
+
+    paginator = Paginator(apontamento_list, req.get("per_page", 25))
+
+    page_number = request.GET.get("page", 1)
+
+    page_obj = paginator.get_page(page_number)
+    page_obj.adjusted_elided_pages = paginator.get_elided_page_range(page_obj.number)
+
+    apontamento_data = [
+        {
+            "id": apontamento.id,
+            "name": apontamento.name,
+            "observation": apontamento.observation,
+            "created_at": apontamento.created_at
+        }
+        for apontamento in page_obj.object_list
+    ]
+
+    page_obj.object_list = apontamento_data
+
+    ctx = {
+        "computer_name": platform.node(),
+        "apontamentos": page_obj,
+    }
+
+    return render(request, 'apontamento/apontamento.html', ctx)
+
+def new_apontamento(request):
+    if request.method == "POST":
+        form = ApontamentoForm(request.POST, request.FILES)
+        if form.is_valid():
+            req = request.POST
+
+            name = req.get("name")
+            observation = req.get("observation")
+            created_at = datetime.now(pytz.utc)
+
+            apontamento = Apontamento(
+                name=name,
+                observation=observation,
+                created_at=created_at
+            )
+
+            apontamento.save()
+            return HttpResponseRedirect("/apontamento-hora/")
+    else:
+        form = ApontamentoForm()
+
+
+    ctx = {
+        "computer_name": platform.node(),
+        "form": form,
+    }
+
+    return render(request, 'apontamento/new_apontamento.html', ctx)

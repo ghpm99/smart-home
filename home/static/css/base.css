@@ -1,8 +1,94 @@
 body {
-
+    background-color: #232323;
 }
 
-.chart{
+.chart {
     width: 150px;
     height: 150px;
 }
+
+.pinning-header {
+    position: sticky;
+    top: 0px;
+    height: auto;
+    min-height: 70px;
+    z-index: 1;
+    padding: 0;
+}
+
+.pinning-header-container {
+    left: 0;
+    position: relative;
+    right: 0;
+    top: 0;
+    padding: 0;
+    z-index: 1;
+    background: transparent;
+}
+
+.main-header {
+    align-items: center;
+    display: flex;
+    font-size: 1.2rem;
+    position: relative;
+    transition: background-color 0.4s;
+
+    background-color: transparent;
+    height: 70px;
+    z-index: 2;
+    background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.7) 10%, transparent);
+    padding: 0 60px;
+    font-size: 14px;
+}
+
+.logo {
+    color: #e50914;
+    cursor: pointer;
+    display: inline-block;
+    text-decoration: none;
+    vertical-align: middle;
+    font-size: 25px;
+    margin-right: 25px;
+}
+
+.tabbed-primary-navigation {
+    align-items: center;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.secondary-navigation{
+    align-items: center;
+    display: flex
+;
+    flex-grow: 1;
+    height: 100%;
+    justify-content: flex-end;
+    position: absolute;
+    right: 60px;
+    top: 0;
+}
+
+.navigation-tab{
+    list-style-type: none;
+    margin-left: 20px;
+    display: block;
+}
+
+.nav-element{
+    margin-right: 15px;
+}
+
+.searchBox{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.searchTab{
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+}
+

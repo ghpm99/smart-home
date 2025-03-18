@@ -18,3 +18,9 @@ class Disk(models.Model):
     mountpoint = models.CharField(max_length=256)
     fstype = models.CharField(max_length=16)
     opts = models.CharField(max_length=512)
+
+
+class Apontamento(models.Model):
+    name = models.CharField(max_length=256)
+    observation = models.CharField(max_length=256)
+    created_at = models.DateTimeField()
