@@ -7,18 +7,15 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th scope="col">ID</th>
                         <th scope="col">Nome</th>
                         <th scope="col">Observação</th>
                         <th scope="col">Criado em</th>
+                        <th scope="col">Tempo gasto</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for apontamento in apontamentos %}
                         <tr>
-                            <th scope="row">
-                                <div>{{ apontamento.id }}</div>
-                            </th >
                             <td>
                                 <div>{{ apontamento.name }}</div>
                             </td>
@@ -27,6 +24,9 @@
                             </td>
                             <td>
                                 <div>{{ apontamento.created_at|date:"d/m/Y H:i" }}</div>
+                            </td>
+                            <td>
+                                <div>{{ apontamento.total_time }}</div>
                             </td>
                         </tr>
                     {% endfor %}

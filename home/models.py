@@ -22,5 +22,5 @@ class Disk(models.Model):
 
 class Apontamento(models.Model):
     name = models.CharField(max_length=256)
-    observation = models.CharField(max_length=256)
+    observation = models.CharField(max_length=256, null=True, blank=True)
     created_at = models.DateTimeField()

@@ -102,6 +102,12 @@ def video(request):
     return render(request, 'media/video.html', ctx)
 
 
+def get_total_time_on_activity(current: Apontamento, previous: Apontamento):
+
+    previous_created_at = previous.created_at if previous is not None else datetime.now(pytz.utc)
+    return previous_created_at - current.created_at
+
+
 def apontamento(request):
     req = request.GET
 
@@ -114,15 +120,23 @@ def apontamento(request):
     page_obj = paginator.get_page(page_number)
     page_obj.adjusted_elided_pages = paginator.get_elided_page_range(page_obj.number)
 
-    apontamento_data = [
-        {
+    apontamento_data = []
+
+    for index,apontamento in enumerate(page_obj.object_list):
+        previous_apontamento = page_obj.object_list[index - 1] if index - 1 >= 0 else None
+        total_time_delta = get_total_time_on_activity(apontamento, previous_apontamento)
+
+        total_seconds = int(total_time_delta.total_seconds())
+        hours, remainder = divmod(total_seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+
+        apontamento_data.append({
             "id": apontamento.id,
             "name": apontamento.name,
             "observation": apontamento.observation,
-            "created_at": apontamento.created_at
-        }
-        for apontamento in page_obj.object_list
-    ]
+            "created_at": apontamento.created_at,
+            "total_time": f"{hours:02}h:{minutes:02}m:{seconds:02}s"  # Formata como HH:MM:SS
+        })
 
     page_obj.object_list = apontamento_data
 
