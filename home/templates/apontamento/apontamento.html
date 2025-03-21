@@ -38,7 +38,7 @@
                         {% if apontamentos.has_previous %}
                             <li class="page-item">
                                 <a class="page-link"
-                                href="?page={{ videos.previous_page_number }}"
+                                href="?page={{ apontamentos.previous_page_number }}"
                                 tabindex="-1">Anterior</a>
                             </li>
                         {% endif %}
@@ -55,7 +55,7 @@
                         {% endfor %}
                         {% if apontamentos.has_next %}
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ videos.next_page_number }}">Proxima</a>
+                                <a class="page-link" href="?page={{ apontamentos.next_page_number }}">Proxima</a>
                             </li>
                         {% endif %}
                     </ul>
